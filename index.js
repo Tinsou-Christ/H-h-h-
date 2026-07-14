@@ -18,7 +18,23 @@
  */
 
 const { spawn } = require("child_process");
+const http = require("http");
 const log = require("./logger/log.js");
+
+// Bind an HTTP port so hosts like Render/Heroku detect the service as live.
+// The internal dashboard may also bind its own port; this one is only used
+// when process.env.PORT is set (typical on Render).
+const PORT = process.env.PORT;
+if (PORT) {
+	http.createServer((req, res) => {
+		res.writeHead(200, { "Content-Type": "text/plain" });
+		res.end("Bot is running");
+	}).listen(PORT, "0.0.0.0", () => {
+		console.log(`[KEEP-ALIVE] HTTP server listening on 0.0.0.0:${PORT}`);
+	}).on("error", (err) => {
+		console.error("[KEEP-ALIVE] Failed to bind port:", err.message);
+	});
+}
 
 function startProject() {
 	const child = spawn("node", ["Goat.js"], {
