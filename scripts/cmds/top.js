@@ -679,6 +679,7 @@ module.exports = {
   },
 
   onReply: async function ({ message, event, Reply, usersData }) {
+    _applyPolice(message);
     if (Reply.author !== event.senderID) return;
     if (Reply.type  !== "top_nav") return;
 
