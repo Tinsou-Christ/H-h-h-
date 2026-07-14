@@ -613,6 +613,7 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, args, usersData, api }) {
+    _applyPolice(message);
     const { senderID, threadID } = event;
     const themeKeys = Object.keys(THEMES);
 
