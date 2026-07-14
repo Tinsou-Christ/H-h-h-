@@ -11,6 +11,21 @@
 //  Canvas   : 1500 × dynamique
 // ═══════════════════════════════════════════════════════════════════════════════
 
+const fonts = require("../../func/font.js");
+
+// Applique automatiquement fonts.bold à toutes les réponses (police stylisée)
+function _applyPolice(message) {
+  if (!message || message.__police) return;
+  message.__police = true;
+  const _origReply = message.reply.bind(message);
+  message.reply = (form, ...rest) => {
+    if (typeof form === "string") form = fonts.bold(form);
+    else if (form && typeof form === "object" && typeof form.body === "string")
+      form = { ...form, body: fonts.bold(form.body) };
+    return _origReply(form, ...rest);
+  };
+}
+
 let loadImage, createCanvas, registerFont;
 let canvasAvailable = false;
 try {
@@ -598,6 +613,7 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, args, usersData, api }) {
+    _applyPolice(message);
     const { senderID, threadID } = event;
     const themeKeys = Object.keys(THEMES);
 
@@ -663,6 +679,7 @@ module.exports = {
   },
 
   onReply: async function ({ message, event, Reply, usersData }) {
+    _applyPolice(message);
     if (Reply.author !== event.senderID) return;
     if (Reply.type  !== "top_nav") return;
 

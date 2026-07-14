@@ -13,6 +13,20 @@
 const fs     = require("fs-extra");
 const path   = require("path");
 const axios  = require("axios");
+const fonts  = require("../../func/font.js");
+
+// Applique automatiquement fonts.bold à toutes les réponses (police stylisée)
+function _applyPolice(message) {
+  if (!message || message.__police) return;
+  message.__police = true;
+  const _origReply = message.reply.bind(message);
+  message.reply = (form, ...rest) => {
+    if (typeof form === "string") form = fonts.bold(form);
+    else if (form && typeof form === "object" && typeof form.body === "string")
+      form = { ...form, body: fonts.bold(form.body) };
+    return _origReply(form, ...rest);
+  };
+}
 const moment = require("moment-timezone");
 
 let loadImage, createCanvas, registerFont;
@@ -665,6 +679,7 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, args, usersData, api }) {
+    _applyPolice(message);
     const { senderID, mentions, messageReply } = event;
     const cmd = args[0]?.toLowerCase();
 
