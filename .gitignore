@@ -8,6 +8,9 @@ createVersionAndCommit.js
 checkOriginCodeChanged.js
 *.zip
 *.dev.*
+!account.dev.txt
+!config.dev.json
+!configCommands.dev.json
 *.rar
 *test.*
 *.test.*
