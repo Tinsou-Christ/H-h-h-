@@ -598,6 +598,7 @@ module.exports = {
   },
 
   onStart: async function ({ message, args, usersData, event }) {
+    _applyPolice(message);
     const cmd = args[0]?.toLowerCase();
     const { senderID } = event;
 
