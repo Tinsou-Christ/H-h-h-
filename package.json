@@ -71,6 +71,8 @@
         "scripts": {
                 "start": "node index.js",
                 "dev": "NODE_ENV=development node index.js",
+                "build": "echo \"No build step for Node bot\"",
+                "build:dev": "echo \"No build step for Node bot\"",
                 "prod": "NODE_ENV=production node index.js"
         },
         "author": "NTKhang",
