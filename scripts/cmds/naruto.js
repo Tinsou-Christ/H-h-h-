@@ -1309,7 +1309,7 @@ module.exports = {
 		name: "naruto",
 		aliases: ["nrt", "ninja"],
 		version: "1.0",
-		author: "Christus",
+		author: "Delfa • Christus",
 		countDown: 0,
 		role: 0,
 		category: "game",
