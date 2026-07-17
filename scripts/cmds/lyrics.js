@@ -1,77 +1,88 @@
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
 
 module.exports = {
   config: {
     name: "lyrics",
-    aliases: ["paroles", "songlyrics"],
     version: "2.0",
     author: "Christus",
     countDown: 5,
     role: 0,
-    shortDescription: "Obtenir les paroles d'une chanson",
-    category: "tools",
-    guide: "{pn} [nom de la chanson]"
+    shortDescription: "Fetch lyrics of a song",
+    longDescription: "Get detailed song lyrics with title, artist, and cover art.",
+    category: "search",
+    guide: {
+      en: "{pn} <song name>\nExample: {pn} Tiakola TIA"
+    }
   },
 
   onStart: async function ({ api, event, args }) {
-    const { threadID, messageID } = event;
-    const songName = args.join(" ");
-
-    if (!songName) {
+    const query = args.join(" ");
+    if (!query) {
       return api.sendMessage(
-        "╭─❍\n│ Veuillez fournir un nom de chanson !\n╰───────────⟡",
-        threadID,
-        messageID
+        "⚠️ Please provide a song name!\nExample: lyrics Tiakola TIA",
+        event.threadID,
+        event.messageID
       );
     }
 
-    const waitMsg = await api.sendMessage(
-      `🔍 | Recherche des paroles pour : ${songName}...`,
-      threadID,
-      messageID
-    );
-
     try {
-      const res = await axios.get(
-        `https://azadx69x-all-apis-top.vercel.app/api/lyrics?song=${encodeURIComponent(songName)}`
+      const { data } = await axios.get(
+        `https://azadx69x-all-apis-top.vercel.app/api/lyrics?song=${encodeURIComponent(query)}`
       );
 
-      if (res.data.success && res.data.lyrics) {
-        const { song, artist, lyrics, image, url } = res.data;
-
-        const truncatedLyrics = lyrics.length > 1500 
-          ? lyrics.substring(0, 1500) + "...\n[Paroles tronquées]"
-          : lyrics;
-
-        const responseText = 
-`╭───────❍
-│  『 𝗣𝗔𝗥𝗢𝗟𝗘𝗦 』
-╰───────────⟡
-🎵 𝗧𝗶𝘁𝗿𝗲    : ${song}
-👤 𝗔𝗿𝘁𝗶𝘀𝘁𝗲 : ${artist}
-📸 𝗣𝗼𝘂𝗿𝗰𝗲𝗹𝗹𝗲 : ${image || "Non disponible"}
-🔗 𝗟𝗶𝗲𝗻    : ${url || "Non disponible"}
-
-📜 𝗣𝗮𝗿𝗼𝗹𝗲𝘀 :
-━━━━━━━━━━━━━━━━━━
-${truncatedLyrics}
-━━━━━━━━━━━━━━━━━━
-🎵 𝗣𝗼𝘄𝗲𝗿𝗲𝗱 𝗯𝘆 𝗖𝗵𝗿𝗶𝘀𝘁𝘂𝘀`;
-
-        return api.editMessage(responseText, waitMsg.messageID);
-      } else {
-        throw new Error(res.data.message || "Aucune donnée trouvée");
+      if (!data?.success || !data?.lyrics) {
+        return api.sendMessage(
+          "❌ Lyrics not found. Please try another song.",
+          event.threadID,
+          event.messageID
+        );
       }
-    } catch (error) {
-      console.error("Erreur lyrics:", error);
-      return api.editMessage(
-        `❌ Impossible de trouver les paroles pour "${songName}" !
-        
-💡 Vérifiez l'orthographe ou essayez avec :
-• Le nom complet de la chanson
-• Artiste + titre (ex: "Tiakola TIA")
-• Un autre titre`,
-        waitMsg.messageID
+
+      const { artist, song, lyrics, image, url } = data;
+
+      const imgPath = path.join(__dirname, "lyrics_temp.jpg");
+      
+      try {
+        const imgResp = await axios.get(image, { responseType: "stream" });
+        const writer = fs.createWriteStream(imgPath);
+        imgResp.data.pipe(writer);
+
+        await new Promise((resolve, reject) => {
+          writer.on("finish", resolve);
+          writer.on("error", reject);
+        });
+
+        await api.sendMessage(
+          {
+            body: `🎵 *${song}*\n👤 Artist: ${artist}\n🔗 Source: ${url}\n\n${lyrics}`,
+            attachment: fs.createReadStream(imgPath)
+          },
+          event.threadID,
+          () => {
+            if (fs.existsSync(imgPath)) fs.unlinkSync(imgPath);
+          },
+          event.messageID
+        );
+
+      } catch (imgError) {
+        console.error("Image download error:", imgError);
+        await api.sendMessage(
+          {
+            body: `🎵 *${song}*\n👤 Artist: ${artist}\n🔗 Source: ${url}\n\n${lyrics}`
+          },
+          event.threadID,
+          event.messageID
+        );
+      }
+
+    } catch (err) {
+      console.error("Lyrics API Error:", err);
+      api.sendMessage(
+        "❌ Error: Unable to fetch lyrics. Please try again later.\nCheck your internet connection.",
+        event.threadID,
+        event.messageID
       );
     }
   }
