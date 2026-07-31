@@ -8,25 +8,47 @@ module.exports = {
     aliases: ["q"],
     version: "3.0",
     author: "Christus",
-    countDown: 0, 
+    countDown: 0,
     role: 0,
-    longDescription: { 
-      en: "Advanced quiz game with social features, multiplayer, achievements, and comprehensive analytics" 
+    longDescription: {
+      en: "Jeu de quiz avancé avec fonctionnalités sociales, multijoueur, succès et analyses complètes"
     },
     category: "game",
     guide: {
-      en: `{pn} <category>`
+      en: `{pn} <catégorie>`
     }
   },
 
   langs: {
     en: {
-      reply: "🎯 𝗤𝘂𝗶𝘇 𝗖𝗵𝗮𝗹𝗹𝗲𝗻𝗴𝗲\n━━━━━━━━━━\n\n📚 𝖢𝖺𝗍𝖾𝗀𝗈𝗋𝗒: {category}\n🎚️ 𝖣𝗂𝖿𝖿𝗂𝖼𝗎𝗅𝗍𝗒: {difficulty}\n❓ 𝗤𝘂𝗲𝘀𝗍𝗂𝗈𝗇: {question}\n\n{options}\n\n⏰ 𝖸𝗈𝗎 𝗁𝖺𝗏𝖾 30 𝗌𝖾𝖼𝗈𝗇𝖽𝗌 𝗍𝗈 𝖺𝗇𝗌𝗐𝖾𝗋 (A/B/C/D):",
-      torfReply: "⚙ 𝗤𝘂𝗶𝘇 ( True/False )\n━━━━━━━━━━\n\n💭 𝗤𝘂𝖾𝗌𝗍𝗂𝗈𝗇: {question}\n\n😆: True\n😮: False\n\nReact with emojis\n⏰ 30 seconds to answer",
-      correctMessage: "🎉 𝗖𝗼𝗿𝗿𝗲𝗰𝘁 𝗔𝗻𝘀𝘄𝗲𝗿!\n━━━━━━━━━━\n\n✅ 𝖲𝖼𝗈𝗋𝖾: {correct}/{total}\n🏆 𝖠𝖼𝖼𝗎𝗋𝖺𝖼𝗒: {accuracy}%\n🔥 𝖢𝗎𝗋𝗋𝖾𝗇𝗍 𝖲𝗍𝗋𝖾𝖺𝗄: {streak}\n⚡ 𝖱𝖾𝗌𝗉𝗈𝗇𝗌𝖾 𝖳𝗂𝗆𝖾: {time}s\n🎯 𝖷𝖯 𝖦𝖺𝗂𝗇𝖾𝖽: +{xp}\n💰 𝖬𝗈𝗇𝖾𝗒 𝖤𝖺𝗋𝗇𝖾𝖽: +{money}",
-      wrongMessage: "❌ 𝗜𝗻𝗰𝗼𝗿𝗿𝗲𝗰𝘁 𝗔𝗻𝘀𝘄𝗲𝗿\n━━━━━━━━━━\n\n🎯 𝖢𝗈𝗋𝗋𝖾𝖼𝗍: {correctAnswer}\n📊 𝖲𝖼𝗈𝗋𝖾: {correct}/{total}\n📈 𝖠𝖼𝖼𝗎𝗋𝖺𝖼𝗒: {accuracy}%\n💔 𝖲𝗍𝗋𝖾𝖺𝗄 𝖱𝖾𝗌𝖾𝗍",
-      timeoutMessage: "⏰ 𝖳𝗂𝗆𝖾'𝗌 𝖴𝗉! 𝖢𝗈𝗋𝗋𝖾𝖼𝗍 𝖺𝗇𝗌𝗐𝖾𝗋: {correctAnswer}",
-      achievementUnlocked: "🏆 𝗔𝗰𝗵𝗶𝗲𝘃𝗲𝗺𝗲𝗻𝘁 𝗨𝗻𝗹𝗼𝗰𝗸𝗲𝗱!\n{achievement}\n💰 +{bonus} bonus coins!"
+      reply: "🎯 𝗤𝘂𝗶𝘇 𝗖𝗵𝗮𝗹𝗹𝗲𝗻𝗴𝗲\n━━━━━━━━━━\n\n📚 𝖢𝖺𝗍é𝗀𝗈𝗋𝗂𝖾: {category}\n🎚️ 𝖣𝗂𝖿𝖿𝗂𝖼𝗎𝗅𝗍é: {difficulty}\n❓ 𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: {question}\n\n{options}\n\n⏰ 𝖵𝗈𝗎𝗌 𝖺𝗏𝖾𝗓 30 𝗌𝖾𝖼𝗈𝗇𝖽𝖾𝗌 𝗉𝗈𝗎𝗋 𝖺𝗇𝗌𝗐𝖾𝗋𝗌 (A/B/C/D):",
+      torfReply: "⚙ 𝗤𝘂𝗶𝘇 ( Vrai/Faux )\n━━━━━━━━━━\n\n💭 𝗤𝘂𝗲𝘀𝘁𝗶𝗼𝗻: {question}\n\n😆: Vrai\n😮: Faux\n\nRéagissez avec les émojis\n⏰ 30 secondes pour répondre",
+      correctMessage: "🎉 𝗕𝗼𝗻𝗻𝗲 𝗿é𝗽𝗼𝗻𝘀𝗲 !\n━━━━━━━━━━\n\n✅ 𝖲𝖼𝗈𝗋𝖾: {correct}/{total}\n🏆 𝖯𝗋é𝖼𝗂𝗌𝗂𝗈𝗇: {accuracy}%\n🔥 𝖲é𝗋𝗂𝖾 𝖾𝗇 𝖼𝗈𝗎𝗋𝗌: {streak}\n⚡ 𝖳𝖾𝗆𝗉𝗌 𝖽𝖾 𝖿é𝗉𝗈𝗇𝗌𝖾: {time}s\n🎯 𝖷𝖯 𝖦𝖺𝗂𝗇é: +{xp}\n💰 𝖠𝗋𝗀𝖾𝗇𝗍 𝗀𝖺𝗀𝗇é: +{money}",
+      wrongMessage: "❌ 𝗠𝗮𝘂𝘃𝗮𝗶𝘀𝗲 𝗿é𝗽𝗼𝗻𝘀𝗲\n━━━━━━━━━━\n\n🎯 𝖡𝗈𝗇𝗇𝖾 𝗋é𝗉𝗈𝗇𝗌𝖾: {correctAnswer}\n📊 𝖲𝖼𝗈𝗋𝖾: {correct}/{total}\n📈 𝖯𝗋é𝖼𝗂𝗌𝗂𝗈𝗇: {accuracy}%\n💔 𝖲é𝗋𝗂𝖾 𝗋é𝗂𝗇𝗂𝗍𝗂𝖺𝗅𝗂𝗌é𝖾",
+      timeoutMessage: "⏰ 𝖳𝖾𝗆𝗉𝗌 é𝖼𝗈𝗎𝗅é ! 𝖡𝗈𝗇𝗇𝖾 𝗋é𝗉𝗈𝗇𝗌𝖾: {correctAnswer}",
+      achievementUnlocked: "🏆 𝗦𝘂𝗰𝗰è𝘀 𝗱é𝗯𝗹𝗼𝗾𝘂é !\n{achievement}\n💰 +{bonus} pièces bonus !"
+    }
+  },
+
+  async safeStream(url) {
+    if (!url || !/^https?:\/\//i.test(url)) return null;
+    try {
+      const res = await axios.get(url, {
+        responseType: "stream",
+        timeout: 20000,
+        maxRedirects: 5,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
+          Accept: "image/avif,image/webp,image/*,*/*;q=0.8",
+          Referer: "https://www.google.com/"
+        }
+      });
+      const ext = (url.split("?")[0].split(".").pop() || "jpg").slice(0, 4);
+      res.data.path = `quiz_${Date.now()}.${ext}`;
+      return res.data;
+    } catch (e) {
+      console.error("Échec du téléchargement de l'image:", url, e.message);
+      try { return await global.utils.getStreamFromURL(url); } catch (e2) { return null; }
     }
   },
 
@@ -38,32 +60,32 @@ module.exports = {
 
   getUserTitle(correct) {
     if (correct >= 50000) return '🌟 Quiz Omniscient';
-    if (correct >= 25000) return '👑 Quiz Deity';
+    if (correct >= 25000) return '👑 Quiz Divinité';
     if (correct >= 15000) return '⚡ Quiz Titan';
-    if (correct >= 10000) return '🏆 Quiz Legend';
-    if (correct >= 7500) return '🎓 Grandmaster';
-    if (correct >= 5000) return '👨‍🎓 Quiz Master';
-    if (correct >= 2500) return '🔥 Quiz Expert';
-    if (correct >= 1500) return '📚 Quiz Scholar';
-    if (correct >= 1000) return '🎯 Quiz Apprentice';
-    if (correct >= 750) return '🌟 Knowledge Seeker';
-    if (correct >= 500) return '📖 Quick Learner';
-    if (correct >= 250) return '🚀 Rising Star';
-    if (correct >= 100) return '💡 Getting Started';
-    if (correct >= 50) return '🎪 First Steps';
-    if (correct >= 25) return '🌱 Newcomer';
-    if (correct >= 10) return '🔰 Beginner';
-    if (correct >= 1) return '👶 Rookie';
-    return '🆕 New Player';
+    if (correct >= 10000) return '🏆 Quiz Légende';
+    if (correct >= 7500) return '🎓 Grand Maître';
+    if (correct >= 5000) return '👨‍🎓 Maître du Quiz';
+    if (correct >= 2500) return '🔥 Expert Quiz';
+    if (correct >= 1500) return '📚 Savant Quiz';
+    if (correct >= 1000) return '🎯 Apprenti Quiz';
+    if (correct >= 750) return '🌟 Chercheur de Connaissances';
+    if (correct >= 500) return '📖 Apprenant Rapide';
+    if (correct >= 250) return '🚀 Étoile Montante';
+    if (correct >= 100) return '💡 Débutant';
+    if (correct >= 50) return '🎪 Premiers Pas';
+    if (correct >= 25) return '🌱 Nouveau Venu';
+    if (correct >= 10) return '🔰 Débutant';
+    if (correct >= 1) return '👶 Recrue';
+    return '🆕 Nouveau Joueur';
   },
 
   async getUserName(api, userId) {
     try {
       const userInfo = await api.getUserInfo(userId);
-      return userInfo[userId]?.name || 'Anonymous Player';
+      return userInfo[userId]?.name || 'Joueur Anonyme';
     } catch (error) {
-      console.warn("User info fetch failed for", userId, error);
-      return 'Anonymous Player';
+      console.warn("Échec de récupération des infos utilisateur pour", userId, error);
+      return 'Joueur Anonyme';
     }
   },
 
@@ -72,7 +94,7 @@ module.exports = {
       const res = await axios.get(`${BASE_URL}/categories`);
       return res.data.map(cat => cat.toLowerCase());
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error("Erreur lors de la récupération des catégories:", error);
       return [];
     }
   },
@@ -122,8 +144,8 @@ module.exports = {
           }
       }
     } catch (err) {
-      console.error("Quiz start error:", err);
-      return message.reply("⚠️ Error occurred, try again.");
+      console.error("Erreur de démarrage du quiz:", err);
+      return message.reply("⚠️ Une erreur est survenue, réessayez.");
     }
   },
 
@@ -136,19 +158,19 @@ module.exports = {
 
       return message.reply(
         `🎯 𝗤𝘂𝗶𝘇\n━━━━━━━━\n\n` +
-        `📚 𝗖𝗮𝘁𝗲𝗴𝗼𝗿𝗶𝗲𝘀\n\n${catText}\n\n` +
+        `📚 𝗖𝗮𝘁é𝗴𝗼𝗿𝗶𝗲𝘀\n\n${catText}\n\n` +
         `━━━━━━━━━\n\n` +
-        `🏆 Usages\n` +
-        `• quiz rank - Show your rank\n` +
-        `• quiz leaderboard - Show leaderboard\n` +
-        `• quiz torf - Play True/False quiz\n` +
-        `• quiz flag - Play flag guessing quiz\n` +
-        `• quiz anime - Play anime character quiz\n\n` +
-        `🎮 Use: quiz <category> to start quiz`
+        `🏆 𝗨𝘁𝗶𝗹𝗶𝘀𝗮𝘁𝗶𝗼𝗻\n` +
+        `• quiz rank - Voir votre classement\n` +
+        `• quiz leaderboard - Voir le classement global\n` +
+        `• quiz torf - Jouer au quiz Vrai/Faux\n` +
+        `• quiz flag - Jouer au quiz des drapeaux\n` +
+        `• quiz anime - Jouer au quiz anime\n\n` +
+        `🎮 Utilisez: quiz <catégorie> pour commencer le quiz`
       );
     } catch (err) {
-      console.error("Default view error:", err);
-      return message.reply("⚠️ Could not fetch categories. Try 'quiz help' for commands.");
+      console.error("Erreur de la vue par défaut:", err);
+      return message.reply("⚠️ Impossible de récupérer les catégories. Essayez 'quiz help' pour les commandes.");
     }
   },
 
@@ -165,7 +187,7 @@ module.exports = {
       const user = res.data;
 
       if (!user || user.total === 0) {
-        return message.reply(`❌ You haven't played any quiz yet! Use 'quiz random' to start.\n👤 Welcome, ${userName}!`);
+        return message.reply(`❌ Vous n'avez pas encore joué de quiz ! Utilisez 'quiz random' pour commencer.\n👤 Bienvenue, ${userName} !`);
       }
 
       const position = user.position ?? "N/A";
@@ -174,12 +196,12 @@ module.exports = {
       const title = this.getUserTitle(user.correct || 0);
 
       const streakInfo = user.currentStreak > 0 ? 
-        `🔥 𝖢𝗎𝗋𝗋𝖾𝗇𝗍 𝖲𝗍𝗋𝖾𝖺𝗄: ${user.currentStreak}${user.currentStreak >= 5 ? ' 🚀' : ''}` :
-        `🔥 𝖢𝗎𝗋𝗋𝖾𝗇𝗍 𝖲𝗍𝗋𝖾𝖺𝗄: 0`;
+        `🔥 𝖲é𝗋𝗂𝖾 𝖾𝗇 𝖼𝗈𝗎𝗋𝗌: ${user.currentStreak}${user.currentStreak >= 5 ? ' 🚀' : ''}` :
+        `🔥 𝖲é𝗋𝗂𝖾 𝖾𝗇 𝖼𝗈𝗎𝗋𝗌: 0`;
 
       const bestStreakInfo = user.bestStreak > 0 ?
-        `🏅 𝖡𝖾𝗌𝗍 𝖲𝗍𝗋𝖾𝖺𝗄: ${user.bestStreak}${user.bestStreak >= 10 ? ' 👑' : user.bestStreak >= 5 ? ' ⭐' : ''}` :
-        `🏅 𝖡𝖾𝗌𝗍 𝖲𝗍𝗋𝖾𝖺𝗄: 0`;
+        `🏅 𝖬𝖾𝗂𝗅𝗅𝖾𝗎𝗋𝖾 𝗌é𝗋𝗂𝖾: ${user.bestStreak}${user.bestStreak >= 10 ? ' 👑' : user.bestStreak >= 5 ? ' ⭐' : ''}` :
+        `🏅 𝖬𝖾𝗂𝗅𝗅𝖾𝗎𝗋𝖾 𝗌é𝗋𝗂𝖾: 0`;
 
       const userData = await usersData.get(event.senderID) || {};
       const userMoney = userData.money || 0;
@@ -190,30 +212,30 @@ module.exports = {
       const xpProgressBar = this.generateProgressBar(xpProgress);
 
       return message.reply(
-        `🎮 𝗤𝘂𝗶𝘇 𝗣𝗿𝗼𝗳𝗂𝗹𝗲\n━━━━━━━━━\n\n` +
+        `🎮 𝗣𝗿𝗼𝗳𝗶𝗹 𝗤𝘂𝗶𝘇\n━━━━━━━━━\n\n` +
         `👤 ${userName}\n` +
         `🎖️ ${title}\n` +
-        `🏆 𝖦𝗅𝗈𝖻𝖺𝗅 𝖱𝖺𝗇𝗄: #${position}/${totalUser}\n` +
+        `🏆 𝖢𝗅𝖺𝗌𝗌𝖾𝗆𝖾𝗇𝗍 𝗀𝗅𝗈𝖻𝖺𝗅: #${position}/${totalUser}\n` +
         `📈 𝖯𝖾𝗋𝖼𝖾𝗇𝗍𝗂𝗅𝖾: ${progressBar} ${user.percentile ?? 0}%\n\n` +
-        `📊 𝗦𝘁𝗮𝗍𝗂𝘀𝘁𝗂𝗰𝘀\n` +
-        `✅ 𝖢𝗈𝗋𝗋𝖾𝖼𝗍: ${user.correct ?? 0}\n` +
-        `❌ 𝖶𝗋𝗈𝗇𝗀: ${user.wrong ?? 0}\n` +
+        `📊 𝗦𝘁𝗮𝘁𝗶𝘀𝘁𝗶𝗾𝘂𝗲𝘀\n` +
+        `✅ 𝖡𝗈𝗇𝗇𝖾𝗌 𝗋é𝗉𝗈𝗇𝗌𝖾𝗌: ${user.correct ?? 0}\n` +
+        `❌ 𝖬𝖺𝗎𝗏𝖺𝗂𝗌𝖾𝗌 𝗋é𝗉𝗈𝗇𝗌𝖾𝗌: ${user.wrong ?? 0}\n` +
         `📝 𝖳𝗈𝗍𝖺𝗅: ${user.total ?? 0}\n` +
-        `🎯 𝖠𝖼𝖼𝗎𝗋𝖺𝖼𝗒: ${user.accuracy ?? 0}%\n` +
-        `⚡ 𝖠𝗏𝗀 𝖱𝖾𝗌𝗉𝗈𝗇𝗌𝖾: ${(user.avgResponseTime ?? 0).toFixed(1)}s\n\n` +
-        `💰 𝗪𝗲𝗮𝗹𝘁𝗵 & 𝗫𝗣\n` +
-        `💵 𝖬𝗈𝗇𝖾𝗒: ${userMoney.toLocaleString()}\n` +
+        `🎯 𝖯𝗋é𝖼𝗂𝗌𝗂𝗈𝗇: ${user.accuracy ?? 0}%\n` +
+        `⚡ 𝖳𝖾𝗆𝗉𝗌 𝗆𝗈𝗒𝖾𝗇 𝗇𝖾 𝗋é𝗉𝗈𝗇𝗌𝖾: ${(user.avgResponseTime ?? 0).toFixed(1)}s\n\n` +
+        `💰 𝗥𝗶𝗰𝗵𝗲𝘀𝘀𝗲 & 𝗫𝗣\n` +
+        `💵 𝖠𝗋𝗀𝖾𝗇𝗍: ${userMoney.toLocaleString()}\n` +
         `✨ 𝖷𝖯: ${currentXP}/1000\n` +
-        `🎯 𝖷𝖯 𝖳𝗈 1000: ${xpTo1000}\n` +
+        `🎯 𝖷𝖯 𝗋𝖾𝗌𝗍𝖺𝗇𝗍 𝗉𝗈𝗎𝗋 1000: ${xpTo1000}\n` +
         `${xpProgressBar} ${xpProgress.toFixed(1)}%\n\n` +
-        `🔥 𝗦𝘁𝗿𝗲𝗮𝗸 𝗜𝗻𝗳𝗼\n` +
+        `🔥 𝗜𝗻𝗳𝗼 𝘀é𝗿𝗶𝗲\n` +
         `${streakInfo}\n` +
         `${bestStreakInfo}\n\n` +
-        `🎯 𝖭𝖾𝗑𝗍 𝖬𝗂𝗅𝖾𝗌𝗍𝗈𝗇𝖾: ${user.nextMilestone || "Keep playing!"}`
+        `🎯 𝖯𝗋𝗈𝖼𝗁𝖺𝗂𝗇 𝗈𝖻𝗃𝖾𝖼𝗍𝗂𝖿: ${user.nextMilestone || "Continuez à jouer !"}`
       );
     } catch (err) {
-      console.error("Rank error:", err);
-      return message.reply("⚠️ Could not fetch rank. Please try again later.");
+      console.error("Erreur de classement:", err);
+      return message.reply("⚠️ Impossible de récupérer le classement. Réessayez plus tard.");
     }
   },
 
@@ -226,25 +248,25 @@ module.exports = {
       const { rankings, stats, pagination } = res.data;
 
       if (!rankings || rankings.length === 0) {
-        return message.reply("🏆 No players found in leaderboard. Start playing to be the first!");
+        return message.reply("🏆 Aucun joueur dans le classement. Commencez à jouer pour être le premier !");
       }
 
       const now = new Date();
-      const currentDate = now.toLocaleDateString('en-US', {
+      const currentDate = now.toLocaleDateString('fr-FR', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC'
       });
-      const currentTime = now.toLocaleTimeString('en-US', {
+      const currentTime = now.toLocaleTimeString('fr-FR', {
         hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC'
       });
 
       const players = await Promise.all(rankings.map(async (u, i) => {
-        let userName = u.name || 'Anonymous Player';
+        let userName = u.name || 'Joueur Anonyme';
 
-        if (u.userId && userName === 'Anonymous Player') {
+        if (u.userId && userName === 'Joueur Anonyme') {
           try {
             userName = await this.getUserName(api, u.userId);
           } catch {
-            userName = u.name || 'Anonymous Player';
+            userName = u.name || 'Joueur Anonyme';
           }
         }
 
@@ -263,31 +285,31 @@ module.exports = {
         const games = u.gamesPlayed || u.total || 0;
         const perfectGames = u.perfectGames || 0;
         const longestSession = u.longestSession?.toFixed(2) || '0';
-        const joinDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'Unknown';
+        const joinDate = u.createdAt ? new Date(u.createdAt).toLocaleDateString('fr-FR') : 'Inconnu';
 
         return `${crown} #${position} ${userName}\n` +
-               `🎖️ ${title} | 🌟 Lv.${level} | ✨ XP: ${xp.toLocaleString()}\n` +
-               `📊 ${u.correct} ✅ / ${u.wrong} ❌ (Accuracy: ${accuracy}%)\n` +
-               `🔥 Current Streak: ${u.currentStreak || 0} | 🏅 Best Streak: ${u.bestStreak || 0}\n` +
-               `⚡ Avg Time: ${avgResponseTime} | ⏱️ Total Time: ${totalResponseTime}s\n` +
-               `🚀 Fastest: ${fastest}s | 🐌 Slowest: ${slowest}s\n` +
-               `🎯 Questions Answered: ${u.questionsAnswered} | Games: ${games}\n` +
-               `🎮 Play Time: ${playTime} | 📈 Perfect Games: ${perfectGames}\n` +
-               `📅 Joined: ${joinDate}`;
+               `🎖️ ${title} | 🌟 Nv.${level} | ✨ XP: ${xp.toLocaleString()}\n` +
+               `📊 ${u.correct} ✅ / ${u.wrong} ❌ (Précision: ${accuracy}%)\n` +
+               `🔥 Série actuelle: ${u.currentStreak || 0} | 🏅 Meilleure série: ${u.bestStreak || 0}\n` +
+               `⚡ Temps moyen: ${avgResponseTime} | ⏱️ Temps total: ${totalResponseTime}s\n` +
+               `🚀 Plus rapide: ${fastest}s | 🐌 Plus lent: ${slowest}s\n` +
+               `🎯 Questions répondues: ${u.questionsAnswered} | Parties: ${games}\n` +
+               `🎮 Temps de jeu: ${playTime} | 📈 Parties parfaites: ${perfectGames}\n` +
+               `📅 Inscrit le: ${joinDate}`;
       }));
 
       return message.reply(
-        `🏆 𝗚𝗹𝗼𝗯𝗮𝗹 𝗟𝗲𝗮𝗱𝗲𝗿𝗯𝗼𝗮𝗿𝗱\n━━━━━━━━━\n\n` +
+        `🏆 𝗖𝗹𝗮𝘀𝘀𝗲𝗺𝗲𝗻𝘁 𝗴𝗹𝗼𝗯𝗮𝗹\n━━━━━━━━━\n\n` +
         `📅 ${currentDate}\n⏰ ${currentTime} UTC\n\n` +
         `━━━━━━━━━\n\n${players.join('\n\n')}\n\n` +
-        `📖 Page ${pagination?.currentPage || 1}/${pagination?.totalPages || 1} | 👥 Total Users: ${stats?.totalUsers || 0}\n` +
-        `🔄 Use: quiz leaderboard <page> <sort>\n` +
-        `📊 Sort options: correct, accuracy, streak, level`
+        `📖 Page ${pagination?.currentPage || 1}/${pagination?.totalPages || 1} | 👥 Total utilisateurs: ${stats?.totalUsers || 0}\n` +
+        `🔄 Utilisez: quiz leaderboard <page> <tri>\n` +
+        `📊 Options de tri: correct, accuracy, streak, level`
       );
 
     } catch (err) {
-      console.error("Leaderboard error:", err);
-      return message.reply("⚠️ Could not fetch leaderboard. Server may be busy, try again later.");
+      console.error("Erreur du classement:", err);
+      return message.reply("⚠️ Impossible de récupérer le classement. Le serveur est peut-être occupé, réessayez plus tard.");
     }
   },
 
@@ -299,15 +321,15 @@ module.exports = {
       const catText = categories.map(c => `📍 ${c.charAt(0).toUpperCase() + c.slice(1)}`).join("\n");
 
       return message.reply(
-        `📚 𝗤𝘂𝗶𝘇 𝗖𝗮𝘁𝗲𝗴𝗼𝗿𝗶𝗲𝘀\n━━━━━━━━\n\n${catText}\n\n` +
-        `🎯 Use: quiz <category>\n` +
-        `🎲 Random: quiz random\n` +
-        `🏆 Daily: quiz daily\n` +
-        `🌟 Special: quiz torf, quiz flag`
+        `📚 𝗖𝗮𝘁é𝗴𝗼𝗿𝗶𝗲𝘀 𝗱𝘂 𝗤𝘂𝗶𝘇\n━━━━━━━━\n\n${catText}\n\n` +
+        `🎯 Utilisez: quiz <catégorie>\n` +
+        `🎲 Aléatoire: quiz random\n` +
+        `🏆 Quotidien: quiz daily\n` +
+        `🌟 Spéciaux: quiz torf, quiz flag, quiz anime`
       );
     } catch (err) {
-      console.error("Categories error:", err);
-      return message.reply("⚠️ Could not fetch categories.");
+      console.error("Erreur des catégories:", err);
+      return message.reply("⚠️ Impossible de récupérer les catégories.");
     }
   },
 
@@ -321,11 +343,11 @@ module.exports = {
       const optText = question.options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n");
 
       const info = await message.reply(
-        `🌟 𝗗𝗮𝗶𝗹𝘆 𝗖𝗵𝗮𝗹𝗹𝗲𝗻𝗴𝗲\n━━━━━━━━━\n\n` +
+        `🌟 𝗗é𝗳𝗶 𝗾𝘂𝗼𝘁𝗶𝗱𝗶𝗲𝗻\n━━━━━━━━━\n\n` +
         `📅 ${challengeDate}\n` +
-        `🎯 Bonus Reward: +${reward} XP\n` +
-        `🔥 Daily Streak: ${streak}\n\n\n` +
-        `❓ ${question.question}\n\n${optText}\n\n⏰ 30 seconds to answer!`
+        `🎯 Récompense bonus: +${reward} XP\n` +
+        `🔥 Série quotidienne: ${streak}\n\n\n` +
+        `❓ ${question.question}\n\n${optText}\n\n⏰ 30 secondes pour répondre !`
       );
 
       global.GoatBot.onReply.set(info.messageID, {
@@ -342,14 +364,14 @@ module.exports = {
       setTimeout(() => {
         const r = global.GoatBot.onReply.get(info.messageID);
         if (r) {
-          message.reply(`⏰ Time's up! The correct answer was: ${question.answer}`);
+          message.reply(`⏰ Temps écoulé ! La bonne réponse était: ${question.answer}`);
           message.unsend(info.messageID);
           global.GoatBot.onReply.delete(info.messageID);
         }
       }, 30000);
     } catch (err) {
-      console.error("Daily challenge error:", err);
-      return message.reply("⚠️ Could not create daily challenge.");
+      console.error("Erreur du défi quotidien:", err);
+      return message.reply("⚠️ Impossible de créer le défi quotidien.");
     }
   },
 
@@ -376,28 +398,32 @@ module.exports = {
       setTimeout(() => {
         const reaction = global.GoatBot.onReaction.get(info.messageID);
         if (reaction && !reaction.reacted) {
-          const correctText = correctAnswer === "A" ? "True" : "False";
+          const correctText = correctAnswer === "A" ? "Vrai" : "Faux";
           message.reply(this.langs.en.timeoutMessage.replace("{correctAnswer}", correctText));
           message.unsend(info.messageID);
           global.GoatBot.onReaction.delete(info.messageID);
         }
       }, 30000);
     } catch (err) {
-      console.error("True/False error:", err);
-      return message.reply("⚠️ Could not create True/False question.");
+      console.error("Erreur Vrai/Faux:", err);
+      return message.reply("⚠️ Impossible de créer la question Vrai/Faux.");
     }
   },
 
   async handleFlagQuiz(message, event, commandName, api) {
     try {
-      const res = await axios.get(`${BASE_URL}/question?category=flag&userId=${event.senderID}`);
+      const res = await axios.get(`${BASE_URL}/question?category=flag&userId=${event.senderID}`, { timeout: 25000 });
       const { _id, question, options, answer } = res.data;
+      
+      if (!Array.isArray(options) || !options.length) {
+        return message.reply("⚠️ Aucune question sur les drapeaux disponible pour le moment. Réessayez plus tard.");
+      }
 
       const flagEmbed = {
-        body: `🏁 𝗙𝗹𝗮𝗴 𝗤𝘂𝗶𝘇\n━━━━━━━━\n\n🌍 Guess this country's flag:\n\n` +
+        body: `🏁 𝗤𝘂𝗶𝘇 𝗱𝗿𝗮𝗽𝗲𝗮𝘂𝘅\n━━━━━━━━\n\n🌍 Devinez le pays de ce drapeau :\n\n` +
               options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n") +
-              `\n\n⏰ Time: 30 seconds for answer.`,
-        attachment: question ? await global.utils.getStreamFromURL(question) : null
+              `\n\n⏰ 30 secondes pour répondre.`,
+        attachment: await this.safeStream(question)
       };
 
       const info = await message.reply(flagEmbed);
@@ -417,27 +443,32 @@ module.exports = {
       setTimeout(() => {
         const r = global.GoatBot.onReply.get(info.messageID);
         if (r) {
-          message.reply(`⏰ Time's up! The correct answer was: ${answer}`);
+          message.reply(`⏰ Temps écoulé ! La bonne réponse était: ${answer}`);
           message.unsend(info.messageID);
           global.GoatBot.onReply.delete(info.messageID);
         }
       }, 30000);
     } catch (err) {
-      console.error("Flag quiz error:", err);
-      return message.reply("⚠️ Could not create flag quiz.");
+      console.error("Erreur du quiz drapeaux:", err);
+      const detail = err?.response?.data?.error || err.message || "erreur inconnue";
+      return message.reply(`⚠️ Impossible de créer le quiz drapeaux.\n📄 Raison: ${detail}`);
     }
   },
 
   async handleAnimeQuiz(message, event, commandName, api) {
     try {
-      const res = await axios.get(`${BASE_URL}/question?category=anime&userId=${event.senderID}`);
-      const { _id, question, options, answer, imageUrl } = res.data;
+      const res = await axios.get(`${BASE_URL}/question?category=anime&userId=${event.senderID}`, { timeout: 25000 });
+      const { _id, question, options, answer, imageUrl, hint } = res.data;
+      
+      if (!Array.isArray(options) || !options.length) {
+        return message.reply("⚠️ Aucune question anime disponible pour le moment. Réessayez plus tard.");
+      }
 
       const animeEmbed = {
-        body: `🎌 𝗔𝗻𝗶𝗺𝗲 𝗤𝘂𝗶𝘇\n━━━━━━━━\n\n❔ 𝗛𝗶𝗻𝘁: ${question}\n\n` +
+        body: `🎌 𝗤𝘂𝗶𝘇 𝗔𝗻𝗶𝗺𝗲\n━━━━━━━━\n\n❔ 𝗜𝗻𝗱𝗶𝗰𝗲: ${hint || question}\n\n` +
               options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n") +
-              `\n\n⏰ Time: 30 seconds\n🎯 Anime Character Recognition Challenge!`,
-        attachment: imageUrl ? await global.utils.getStreamFromURL(imageUrl) : null
+              `\n\n⏰ 30 secondes\n🎯 Défi de reconnaissance de personnage !`,
+        attachment: await this.safeStream(imageUrl || question)
       };
 
       const info = await message.reply(animeEmbed);
@@ -457,14 +488,15 @@ module.exports = {
       setTimeout(() => {
         const r = global.GoatBot.onReply.get(info.messageID);
         if (r) {
-          message.reply(`⏰ Time's up! The correct answer was: ${answer}\n🎌 Keep watching anime to improve your skills!`);
+          message.reply(`⏰ Temps écoulé ! La bonne réponse était: ${answer}\n🎌 Continuez à regarder des anime pour améliorer vos compétences !`);
           message.unsend(info.messageID);
           global.GoatBot.onReply.delete(info.messageID);
         }
       }, 30000);
     } catch (err) {
-      console.error("Anime quiz error:", err);
-      return message.reply("⚠️ Could not create anime quiz. Make sure anime questions are available in the database.");
+      console.error("Erreur du quiz anime:", err);
+      const detail = err?.response?.data?.error || err.message || "erreur inconnue";
+      return message.reply(`⚠️ Impossible de créer le quiz anime.\n📄 Raison: ${detail}`);
     }
   },
 
@@ -495,8 +527,8 @@ module.exports = {
       const optText = options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n");
 
       const info = await message.reply(getLang("reply")
-        .replace("{category}", qCategory?.charAt(0).toUpperCase() + qCategory?.slice(1) || "Random")
-        .replace("{difficulty}", difficulty?.charAt(0).toUpperCase() + difficulty?.slice(1) || "Medium")
+        .replace("{category}", qCategory?.charAt(0).toUpperCase() + qCategory?.slice(1) || "Aléatoire")
+        .replace("{difficulty}", difficulty?.charAt(0).toUpperCase() + difficulty?.slice(1) || "Moyen")
         .replace("{question}", question)
         .replace("{options}", optText));
 
@@ -520,8 +552,8 @@ module.exports = {
         }
       }, 30000);
     } catch (err) {
-      console.error("Quiz error:", err);
-      message.reply("⚠️ Could not get quiz question. Try 'quiz categories' to see available options.");
+      console.error("Erreur du quiz:", err);
+      message.reply("⚠️ Impossible de récupérer une question. Essayez 'quiz categories' pour voir les options disponibles.");
     }
   },
 
@@ -529,7 +561,7 @@ module.exports = {
     try {
       const category = args[0]?.toLowerCase();
       if (!category) {
-        return message.reply("📚 Please specify a category to view the leaderboard for.");
+        return message.reply("📚 Veuillez spécifier une catégorie pour voir le classement.");
       }
 
       const page = parseInt(args[1]) || 1;
@@ -537,11 +569,11 @@ module.exports = {
       const { users, pagination } = res.data;
 
       if (!users || users.length === 0) {
-        return message.reply(`🏆 No players found for the category: ${category}.`);
+        return message.reply(`🏆 Aucun joueur trouvé pour la catégorie: ${category}.`);
       }
 
       const topPlayersWithNames = await Promise.all(users.map(async (u, i) => {
-        let userName = 'Anonymous Player';
+        let userName = 'Joueur Anonyme';
         if (u.userId) {
           userName = await this.getUserName(api, u.userId);
         }
@@ -555,17 +587,15 @@ module.exports = {
       const topPlayers = topPlayersWithNames.join('\n\n');
 
       return message.reply(
-        `🏆 𝗟𝗲𝗮𝗱𝗲𝗿𝗯𝗼𝗮𝗿𝗱: ${category.charAt(0).toUpperCase() + category.slice(1)}\n━━━━━━━━━\n\n${topPlayers}\n\n` +
+        `🏆 𝗖𝗹𝗮𝘀𝘀𝗲𝗺𝗲𝗻𝘁: ${category.charAt(0).toUpperCase() + category.slice(1)}\n━━━━━━━━━\n\n${topPlayers}\n\n` +
         `📖 Page ${pagination.currentPage}/${pagination.totalPages}\n` +
-        `👥 Total Players: ${pagination.totalUsers}`
+        `👥 Total joueurs: ${pagination.totalUsers}`
       );
     } catch (err) {
-      console.error("Category leaderboard error:", err);
-      return message.reply("⚠️ Could not fetch category leaderboard.");
+      console.error("Erreur du classement par catégorie:", err);
+      return message.reply("⚠️ Impossible de récupérer le classement de la catégorie.");
     }
   },
-
-
 
   onReaction: async function ({ message, event, Reaction, api, usersData }) {
     try {
@@ -578,7 +608,7 @@ module.exports = {
 
       const timeSpent = (Date.now() - Reaction.startTime) / 1000;
       if (timeSpent > 30) {
-        return message.reply("⏰ Time's up!");
+        return message.reply("⏰ Temps écoulé !");
       }
 
       const userName = await this.getUserName(api, event.userID);
@@ -604,59 +634,59 @@ module.exports = {
           userData.money = (userData.money || 0) + totalMoneyReward;
           await usersData.set(event.userID, userData);
 
-          const correctText = answer === "A" ? "True" : "False";
+          const correctText = answer === "A" ? "Vrai" : "Faux";
 
           const torfSuccessMessages = [
-            "🎯 𝗔𝗕𝗦𝗢𝗟𝗨𝗧𝗘𝗟𝗬 𝗧𝗥𝗨𝗘! 𝗬𝗼𝘂’𝗿𝗲 𝗮 𝗴𝗲𝗻𝗶𝘂𝘀! ✨",
-            "⚡ 𝗣𝗘𝗥𝗙𝗘𝗖𝗧! 𝗧𝗿𝘂𝗲/𝗙𝗮𝗹𝘀𝗲 𝗺𝗮𝘀𝘁𝗲𝗿! 🏆",
-            "🔥 𝗙𝗔𝗡𝗧𝗔𝗦𝗧𝗜𝗖! 𝗬𝗼𝘂 𝗻𝗮𝗶𝗹𝗲𝗱 𝗶𝘁! 🎯",
-            "🌟 𝗕𝗥𝗔𝗩𝗢! 𝗦𝗶𝗺𝗽𝗹𝗲 𝗯𝘂𝘁 𝗲𝗳𝗳𝗲𝗰𝘁𝗶𝘃𝗲! ⭐",
-            "🎊 𝗘𝗫𝗖𝗘𝗟𝗟𝗘𝗡𝗧! 𝗤𝘂𝗶𝗰𝗸 𝗮𝗻𝗱 𝗰𝗼𝗿𝗿𝗲𝗰𝘁! 🚀"
+            "🎯 𝗔𝗕𝗦𝗢𝗟𝗨𝗠𝗘𝗡𝗧 𝗩𝗥𝗔𝗜 ! 𝗩𝗼𝘂𝘀 ê𝘁𝗲𝘀 𝘂𝗻 𝗴é𝗻𝗶𝗲 ! ✨",
+            "⚡ 𝗣𝗔𝗥𝗙𝗔𝗜𝗧 ! 𝗠𝗮î𝘁𝗿𝗲 𝗱𝘂 𝗩𝗿𝗮𝗶/𝗙𝗮𝘂𝘅 ! 🏆",
+            "🔥 𝗙𝗔𝗡𝗧𝗔𝗦𝗧𝗜𝗤𝗨𝗘 ! 𝗩𝗼𝘂𝘀 𝗮𝘃𝗲𝘇 𝗿é𝘂𝘀𝘀𝗶 ! 🎯",
+            "🌟 𝗕𝗥𝗔𝗩𝗢 ! 𝗦𝗶𝗺𝗽𝗹𝗲 𝗺𝗮𝗶𝘀 𝗲𝗳𝗳𝗶𝗰𝗮𝗰𝗲 ! ⭐",
+            "🎊 𝗘𝗫𝗖𝗘𝗟𝗟𝗘𝗡𝗧 ! 𝗥𝗮𝗽𝗶𝗱𝗲 𝗲𝘁 𝗰𝗼𝗿𝗿𝗲𝗰𝘁 ! 🚀"
           ];
 
           const randomTorfMsg = torfSuccessMessages[Math.floor(Math.random() * torfSuccessMessages.length)];
 
           let streakMessage = "";
           const streak = user.currentStreak || 0;
-          if (streak >= 5) streakMessage = "\n🔥 𝗔𝗺𝗮𝘇𝗶𝗻𝗴 𝘀𝘁𝗿𝗲𝗮𝗸! 𝗞𝗲𝗲𝗽 𝗶𝘁 𝗴𝗼𝗶𝗻𝗴! 🚀";
+          if (streak >= 5) streakMessage = "\n🔥 𝗦é𝗿𝗶𝗲 𝗮𝗺𝗮𝘇𝗶𝗻𝗴𝗻𝗲 ! 𝗖𝗼𝗻𝘁𝗶𝗻𝘂𝗲𝘇 𝗮𝗶𝗻𝘀𝗶 ! 🚀";
 
           const successMsg = `${randomTorfMsg}\n` +
             `━━━━━━━━━\n\n` +
-            `🎉 𝗖𝗼𝗻𝗴𝗿𝗮𝘁𝘂𝗹𝗮𝘁𝗶𝗼𝗻𝘀, ${userName}! 🎉\n\n` +
-            `💰 𝗠𝗼𝗻𝗲𝘆 𝗘𝗮𝗿𝗻𝗲𝗱: +${totalMoneyReward.toLocaleString()} 💎\n` +
-            `✨ 𝗫𝗣 𝗚𝗮𝗶𝗻𝗲𝗱: +${xpGained || 15} ⚡\n` +
-            `🔥 𝗦𝘁𝗿𝗲𝗮𝗸: ${user.currentStreak || 0} 🚀\n` +
-            `⏱️ 𝗧𝗶𝗺𝗲: ${timeSpent.toFixed(1)}s` + streakMessage +
-            `\n\n🎯 𝗧𝗿𝘂𝗲/𝗙𝗮𝗹𝘀𝗲 𝗺𝗮𝘀𝘁𝗲𝗿! 𝗞𝗲𝗲𝗽 𝗴𝗼𝗶𝗻𝗴! 🌟`;
+            `🎉 𝗙é𝗹𝗶𝗰𝗶𝘁𝗮𝘁𝗶𝗼𝗻𝘀, ${userName} ! 🎉\n\n` +
+            `💰 𝗔𝗿𝗴𝗲𝗻𝘁 𝗴𝗮𝗴𝗻é: +${totalMoneyReward.toLocaleString()} 💎\n` +
+            `✨ 𝗫𝗣 𝗴𝗮𝗴𝗻é: +${xpGained || 15} ⚡\n` +
+            `🔥 𝗦é𝗿𝗶𝗲: ${user.currentStreak || 0} 🚀\n` +
+            `⏱️ 𝗧𝗲𝗺𝗽𝘀: ${timeSpent.toFixed(1)}s` + streakMessage +
+            `\n\n🎯 𝗠𝗮î𝘁𝗿𝗲 𝗱𝘂 𝗩𝗿𝗮𝗶/𝗙𝗮𝘂𝘅 ! 𝗖𝗼𝗻𝘁𝗶𝗻𝘂𝗲𝘇 𝗮𝗶𝗻𝘀𝗶 ! 🌟`;
           message.reply(successMsg);
         } else {
-          const correctText = answer === "A" ? "True" : "False";
+          const correctText = answer === "A" ? "Vrai" : "Faux";
 
           const torfWrongMessages = [
-            "💔 𝗔𝘄𝘄! 𝗧𝗿𝘂𝗲/𝗙𝗮𝗹𝘀𝗲 𝗰𝗮𝗻 𝗯𝗲 𝘁𝗿𝗶𝗰𝗸𝘆! 🤔",
-            "🌱 𝗢𝗼𝗽𝘀! 𝗡𝗼 𝘄𝗼𝗿𝗿𝗶𝗲𝘀, 𝗸𝗲𝗲𝗽 𝗹𝗲𝗮𝗿𝗻𝗶𝗻𝗴! 📚",
-            "🔄 𝗡𝗼𝘁 𝗾𝘂𝗶𝘁𝗲! 𝗦𝗼𝗺𝗲𝘁𝗶𝗺𝗲𝘀 𝗶𝘁'𝘀 𝗮 𝗴𝘂𝗲𝘀𝘀! 🎲",
-            "⭐ 𝗪𝗿𝗼𝗻𝗴! 𝗣𝗿𝗮𝗰𝘁𝗶𝗰𝗲 𝗺𝗮𝗸𝗲𝘀 𝗽𝗲𝗿𝗳𝗲𝗰𝘁! 💪",
-            "💫 𝗠𝗶𝘀𝘀! 𝗘𝘃𝗲𝗻 𝗺𝗮𝘀𝘁𝗲𝗿𝘀 𝗺𝗶𝘀𝘀 𝘀𝗼𝗺𝗲𝘁𝗶𝗺𝗲𝘀! 🌟"
+            "💔 𝗢𝗼𝗵 ! 𝗟𝗲 𝗩𝗿𝗮𝗶/𝗙𝗮𝘂𝘅 𝗽𝗲𝘂𝘁 ê𝘁𝗿𝗲 𝗱𝗶𝗳𝗳𝗶𝗰𝗶𝗹𝗲 ! 🤔",
+            "🌱 𝗢𝘂𝗽𝘀 ! 𝗖𝗲 𝗻'𝗲𝘀𝘁 𝗽𝗮𝘀 𝗴𝗿𝗮𝘃𝗲, 𝗰𝗼𝗻𝘁𝗶𝗻𝘂𝗲𝘇 𝗱'𝗮𝗽𝗽𝗿𝗲𝗻𝗱𝗿𝗲 ! 📚",
+            "🔄 𝗣𝗮𝘀 𝘁𝗼𝘁𝗮𝗹𝗲𝗺𝗲𝗻𝘁 ! 𝗣𝗮𝗿𝗳𝗼𝗶𝘀 𝗰'𝗲𝘀𝘁 𝘂𝗻𝗲 𝗾𝘂𝗲𝘀𝘁𝗶𝗼𝗻 𝗱𝗲 𝗰𝗵𝗮𝗻𝗰𝗲 ! 🎲",
+            "⭐ 𝗙𝗮𝘂𝘅 ! 𝗟𝗮 𝗽𝗿𝗮𝘁𝗶𝗾𝘂𝗲 𝗿𝗲𝗻𝗱 𝗽𝗲𝗿𝗳𝗲𝗰𝘁 ! 💪",
+            "💫 𝗥𝗮𝘁é ! 𝗠𝗲̂𝗺𝗲 𝗹𝗲𝘀 𝗺𝗮î𝘁𝗿𝗲𝘀 𝗿𝗮𝘁𝗲𝗻𝘁 𝗽𝗮𝗿𝗳𝗼𝗶𝘀 ! 🌟"
           ];
 
           const randomTorfWrongMsg = torfWrongMessages[Math.floor(Math.random() * torfWrongMessages.length)];
 
           message.reply(`${randomTorfWrongMsg}\n` +
             `━━━━━━━━━\n\n` +
-            `🎯 𝗖𝗼𝗿𝗿𝗲𝗰𝘁 𝗔𝗻𝘀𝘄𝗲𝗿: ${correctText} ✅\n` +
+            `🎯 𝗕𝗼𝗻𝗻𝗲 𝗿é𝗽𝗼𝗻𝘀𝗲: ${correctText} ✅\n` +
             `👤 ${userName}\n` +
-            `💔 𝗦𝘁𝗿𝗲𝗮𝗸 𝗥𝗲𝘀𝗲𝘁\n\n` +
-            `🔥 𝗡𝗲𝘅𝘁 𝗾𝘂𝗲𝘀𝘁𝗶𝗼𝗻 𝗮𝘄𝗮𝗶𝘁𝘀! 𝗟𝗲𝘁'𝘀 𝗴𝗲𝘁 𝗶𝘁! 🚀`);
+            `💔 𝗦é𝗿𝗶𝗲 𝗿é𝗶𝗻𝗶𝘁𝗶𝗮𝗹𝗶𝘀é𝗲\n\n` +
+            `🔥 𝗣𝗿𝗼𝗰𝗵𝗮𝗶𝗻𝗲 𝗾𝘂𝗲𝘀𝘁𝗶𝗼𝗻 𝗯𝗶𝗲𝗻𝘁ô𝘁 ! 𝗔𝗹𝗹𝗲𝘇, 𝘃𝗼𝘂𝘀 𝗽𝗼𝘂𝘃𝗲𝘇 𝗹𝗲 𝗳𝗮𝗶𝗿𝗲 ! 🚀`);
         }
       } catch (error) {
-        console.error("Error updating score:", error);
+        console.error("Erreur lors de la mise à jour du score:", error);
       }
 
       global.GoatBot.onReaction.get(messageID).reacted = true;
       setTimeout(() => global.GoatBot.onReaction.delete(messageID), 1000);
     } catch (err) {
-      console.error("Quiz reaction error:", err);
+      console.error("Erreur de réaction au quiz:", err);
     }
   },
 
@@ -666,12 +696,12 @@ module.exports = {
     try {
       const ans = event.body.trim().toUpperCase();
       if (!["A", "B", "C", "D"].includes(ans)) {
-        return message.reply("❌ Please reply with A, B, C, or D only!");
+        return message.reply("❌ Veuillez répondre avec A, B, C ou D uniquement !");
       }
 
       const timeSpent = (Date.now() - Reply.startTime) / 1000;
       if (timeSpent > 30) {
-        return message.reply("⏰ Time's up!");
+        return message.reply("⏰ Temps écoulé !");
       }
 
       const userName = await this.getUserName(api, event.senderID);
@@ -697,7 +727,7 @@ module.exports = {
       const res = await axios.post(`${BASE_URL}/answer`, answerData);
 
       if (!res.data) {
-        throw new Error('No response data received');
+        throw new Error('Aucune donnée de réponse reçue');
       }
 
       const { result, user } = res.data;
@@ -721,23 +751,23 @@ module.exports = {
         await usersData.set(event.senderID, userData);
 
         const difficultyBonus = Reply.difficulty === 'hard' ? ' 🔥' : Reply.difficulty === 'easy' ? ' ⭐' : '';
-        const streakBonus2 = (user.currentStreak || 0) >= 5 ? ` 🚀 ${user.currentStreak}x streak!` : '';
+        const streakBonus2 = (user.currentStreak || 0) >= 5 ? ` 🚀 ${user.currentStreak}x série !` : '';
         const flagBonus = Reply.isFlag ? ' 🏁' : '';
         const animeBonus = Reply.isAnime ? ' 🎌' : '';
         const dailyBonus = Reply.isDailyChallenge ? ' 🌟' : '';
 
-        responseMsg = `🎉 Correct! 💰\n` +
-          `💵 Money: +${totalMoneyReward.toLocaleString()}\n` +
+        responseMsg = `🎉 Bonne réponse ! 💰\n` +
+          `💵 Argent: +${totalMoneyReward.toLocaleString()}\n` +
           `✨ XP: +${user.xpGained || 15}\n` +
           `📊 Score: ${user.correct || 0}/${user.total || 0} (${user.accuracy || 0}%)\n` +
-          `🔥 Streak: ${user.currentStreak || 0}\n` +
-          `⚡ Response Time: ${timeSpent.toFixed(1)}s\n` +
-          `🎯 XP Progress: ${user.xp || 0}/1000\n` +
+          `🔥 Série: ${user.currentStreak || 0}\n` +
+          `⚡ Temps de réponse: ${timeSpent.toFixed(1)}s\n` +
+          `🎯 Progression XP: ${user.xp || 0}/1000\n` +
           `👤 ${userName}` + difficultyBonus + streakBonus2 + flagBonus + animeBonus + dailyBonus;
       } else {
-        responseMsg = `❌ Wrong! Correct answer: ${correctAnswer}\n` +
+        responseMsg = `❌ Mauvaise réponse ! Bonne réponse: ${correctAnswer}\n` +
           `📊 Score: ${user.correct || 0}/${user.total || 0} (${user.accuracy || 0}%)\n` +
-          `💔 Streak Reset\n` +
+          `💔 Série réinitialisée\n` +
           `👤 ${userName}` + (Reply.isFlag ? ' 🏁' : '') + (Reply.isAnime ? ' 🎌' : '');
       }
 
@@ -745,7 +775,7 @@ module.exports = {
 
       if (user.achievements && user.achievements.length > 0) {
         const achievementMsg = user.achievements.map(ach => `🏆 ${ach}`).join('\n');
-        await message.reply(`🏆 Achievement Unlocked!\n${achievementMsg}\n💰 +50,000 bonus coins!\n✨ +100 bonus XP!`);
+        await message.reply(`🏆 Succès débloqué !\n${achievementMsg}\n💰 +50,000 pièces bonus !\n✨ +100 XP bonus !`);
 
         const userData = await usersData.get(event.senderID) || {};
         userData.money = (userData.money || 0) + 50000;
@@ -755,9 +785,9 @@ module.exports = {
       message.unsend(Reply.messageID);
       global.GoatBot.onReply.delete(Reply.messageID);
     } catch (err) {
-      console.error("Answer error:", err);
-      const errorMsg = err.response?.data?.error || err.message || "Unknown error occurred";
-      message.reply(`⚠️ Error processing your answer: ${errorMsg}`);
+      console.error("Erreur de réponse:", err);
+      const errorMsg = err.response?.data?.error || err.message || "Erreur inconnue";
+      message.reply(`⚠️ Erreur lors du traitement de votre réponse: ${errorMsg}`);
     }
   },
 
