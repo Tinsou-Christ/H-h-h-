@@ -31,8 +31,8 @@ const STICKERS = [
   "387545578037993"
 ];
 
-const API_ENDPOINT = "https://shizuai.vercel.app/chat";
-const CLEAR_ENDPOINT = "https://shizuai.vercel.app/chat/clear";
+const API_ENDPOINT = "https://future-chat-api.onrender.com/chat";
+const CLEAR_ENDPOINT = "https://future-chat-api.onrender.com/chat/clear";
 const TMP_DIR = path.join(__dirname, 'tmp');
 
 if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR);
@@ -43,14 +43,7 @@ const getRandomSticker = () => {
 
 const formatCoolText = (text) => {
   if (!text) return "";
-
-  let formatted = text
-    .replace(/Heck\.ai/gi, "Christus")
-    .replace(/Aryan/gi, "Christus")
-    .replace(/Shizu AI|Shizuka AI|Shizuka|Shizu/gi, "Christus AI");
-
-  formatted = formatted.replace(/\*(.*?)\*/g, (_, p1) => fonts.serif(p1));
-  return fonts.sansSerif(formatted);
+  return fonts.sansSerif(text);
 };
 
 const downloadFile = async (url, ext) => {
@@ -64,9 +57,9 @@ const resetConversation = async (api, event, message) => {
   api.setMessageReaction("♻️", event.messageID, () => {}, true);
   try {
     await axios.delete(`${CLEAR_ENDPOINT}/${event.senderID}`);
-    return message.reply("✅ Conversation reset.");
+    return message.reply("✅ Conversation réinitialisée.");
   } catch {
-    return message.reply("❌ Reset failed.");
+    return message.reply("❌ Échec de la réinitialisation.");
   }
 };
 
@@ -90,7 +83,7 @@ const handleAIRequest = async (api, event, userInput, message) => {
 
   if (!messageContent && !imageUrl) {
     api.setMessageReaction("❌", event.messageID, () => {}, true);
-    return;
+    return message.reply("❌ Veuillez fournir un message ou une image.");
   }
 
   try {
@@ -100,24 +93,19 @@ const handleAIRequest = async (api, event, userInput, message) => {
       { timeout: 60000 }
     );
 
-    const {
-      reply,
-      image_url,
-      music_data,
-      video_data,
-      shotti_data
-    } = response.data;
+    const { reply, model } = response.data;
 
     const finalBody = formatCoolText(reply);
-    const attachments = [];
 
-    if (image_url) attachments.push(fs.createReadStream(await downloadFile(image_url, 'jpg')));
-    if (music_data?.downloadUrl) attachments.push(fs.createReadStream(await downloadFile(music_data.downloadUrl, 'mp3')));
-    if (video_data?.downloadUrl) attachments.push(fs.createReadStream(await downloadFile(video_data.downloadUrl, 'mp4')));
-    if (shotti_data?.videoUrl) attachments.push(fs.createReadStream(await downloadFile(shotti_data.videoUrl, 'mp4')));
+    let attachments = [];
+    if (imageUrl) {
+      try {
+        attachments.push(fs.createReadStream(await downloadFile(imageUrl, 'jpg')));
+      } catch (e) {}
+    }
 
     const sent = await message.reply({
-      body: finalBody,
+      body: `🤖 Christus AI\n━━━━━━━━━\n${finalBody}\n━━━━━━━━━\n🔮 Modèle: ${model || 'GPT-5.6'}`,
       attachment: attachments.length ? attachments : undefined
     });
 
@@ -133,6 +121,19 @@ const handleAIRequest = async (api, event, userInput, message) => {
 
   } catch (err) {
     console.error(err);
+    
+    let errorMsg = "❌ Désolé, une erreur est survenue.\n";
+    if (err.code === 'ECONNABORTED') {
+      errorMsg += "⏰ Le serveur met trop de temps à répondre.";
+    } else if (err.response?.status === 429) {
+      errorMsg += "🚦 Trop de requêtes. Attendez un peu.";
+    } else if (err.response?.status === 503) {
+      errorMsg += "🔧 Service en maintenance. Réessayez plus tard.";
+    } else {
+      errorMsg += "🔧 Erreur interne. Réessayez plus tard.";
+    }
+    
+    message.reply(errorMsg);
     api.setMessageReaction("❌", event.messageID, () => {}, true);
   }
 };
@@ -141,10 +142,13 @@ module.exports = {
   config: {
     name: 'ai',
     aliases: [],
-    version: '2.6.0',
+    version: '3.0.0',
     author: 'Christus',
     role: 0,
-    category: 'ai'
+    category: 'ai',
+    shortDescription: { en: 'Chat with Christus AI (GPT-5.6)' },
+    longDescription: { en: 'Advanced AI chat with image recognition support.' },
+    guide: { en: '{pn} <message> | {pn} clear' }
   },
 
   onStart: async function ({ api, event, args, message }) {
@@ -154,7 +158,13 @@ module.exports = {
       const sticker = getRandomSticker();
       api.sendMessage({ sticker }, event.threadID);
       api.setMessageReaction("🟡", event.messageID, () => {}, true);
-      return;
+      return message.reply(
+        "🤖 Christus AI\n━━━━━━━━━\n" +
+        "💬 Envoyez un message pour discuter avec moi.\n" +
+        "🖼️ Répondez à un message avec une image.\n" +
+        "♻️ Tapez 'ai clear' pour réinitialiser la conversation.\n" +
+        "━━━━━━━━━\n🔮 Modèle: GPT-5.6"
+      );
     }
 
     if (['clear', 'reset'].includes(input.toLowerCase())) {
