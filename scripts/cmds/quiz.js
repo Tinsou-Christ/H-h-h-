@@ -6,16 +6,16 @@ module.exports = {
   config: {
     name: "quiz",
     aliases: ["q"],
-    version: "3.0",
+    version: "4.0",
     author: "Christus",
     countDown: 0,
     role: 0,
     longDescription: {
-      en: "Jeu de quiz avancé avec fonctionnalités sociales, multijoueur, succès et analyses complètes"
+      en: "Jeu de quiz avancé avec 6000+ questions, images, succès et classements"
     },
     category: "game",
     guide: {
-      en: `{pn} <catégorie>`
+      en: `{pn} <catégorie>\n\n📚 Catégories disponibles :\n🎌 anime, 🏁 flag, 📺 cartoon, 🐾 animaux, 🏛️ monument, ⚽ sport, 🔬 science, 📖 histoire, 🎬 cinema, 🌍 geographie, ➗ maths, 🎭 culture, ⚖️ torf`
     }
   },
 
@@ -127,6 +127,24 @@ module.exports = {
           return await this.handleFlagQuiz(message, event, commandName, api);
         case "anime":
           return await this.handleAnimeQuiz(message, event, commandName, api);
+        case "cartoon":
+        case "dessin":
+        case "dessins":
+        case "kids":
+          return await this.handleImageQuiz(message, event, commandName, "cartoon", "📺 𝗤𝘂𝗶𝘇 𝗗𝗲𝘀𝘀𝗶𝗻𝘀 𝗔𝗻𝗶𝗺é𝘀");
+        case "animaux":
+        case "animal":
+          return await this.handleImageQuiz(message, event, commandName, "animaux", "🐾 𝗤𝘂𝗶𝘇 𝗔𝗻𝗶𝗺𝗮𝘂𝘅");
+        case "monument":
+        case "monuments":
+          return await this.handleImageQuiz(message, event, commandName, "monument", "🏛️ 𝗤𝘂𝗶𝘇 𝗠𝗼𝗻𝘂𝗺𝗲𝗻𝘁𝘀");
+        case "sport":
+        case "sports":
+          return await this.handleImageQuiz(message, event, commandName, "sport", "⚽ 𝗤𝘂𝗶𝘇 𝗦𝗽𝗼𝗿𝘁");
+        case "cinema":
+        case "film":
+        case "films":
+          return await this.handleImageQuiz(message, event, commandName, "cinema", "🎬 𝗤𝘂𝗶𝘇 𝗖𝗶𝗻é𝗺𝗮");
         case "hard":
           return await this.handleQuiz(message, event, ["general"], commandName, getLang, api, usersData, "hard");
         case "medium":
@@ -154,18 +172,30 @@ module.exports = {
       const res = await axios.get(`${BASE_URL}/categories`);
       const categories = res.data;
 
-      const catText = categories.map(c => `📍 ${c.charAt(0).toUpperCase() + c.slice(1)}`).join("\n");
+      const catText = categories.map(c => {
+        const icons = {
+          anime: '🎌', flag: '🏁', cartoon: '📺', animaux: '🐾',
+          monument: '🏛️', sport: '⚽', science: '🔬', histoire: '📖',
+          cinema: '🎬', geographie: '🌍', maths: '➗', culture: '🎭',
+          torf: '⚖️', general: '🎯'
+        };
+        return `${icons[c] || '📍'} ${c.charAt(0).toUpperCase() + c.slice(1)}`;
+      }).join("\n");
 
       return message.reply(
         `🎯 𝗤𝘂𝗶𝘇\n━━━━━━━━\n\n` +
-        `📚 𝗖𝗮𝘁é𝗴𝗼𝗿𝗶𝗲𝘀\n\n${catText}\n\n` +
+        `📚 𝗖𝗮𝘁é𝗴𝗼𝗿𝗶𝗲𝘀 (${categories.length})\n\n${catText}\n\n` +
         `━━━━━━━━━\n\n` +
         `🏆 𝗨𝘁𝗶𝗹𝗶𝘀𝗮𝘁𝗶𝗼𝗻\n` +
         `• quiz rank - Voir votre classement\n` +
         `• quiz leaderboard - Voir le classement global\n` +
         `• quiz torf - Jouer au quiz Vrai/Faux\n` +
         `• quiz flag - Jouer au quiz des drapeaux\n` +
-        `• quiz anime - Jouer au quiz anime\n\n` +
+        `• quiz anime - Jouer au quiz anime\n` +
+        `• quiz cartoon - Jouer au quiz dessins animés\n` +
+        `• quiz animaux - Jouer au quiz animaux\n` +
+        `• quiz monument - Jouer au quiz monuments\n` +
+        `• quiz sport - Jouer au quiz sport\n\n` +
         `🎮 Utilisez: quiz <catégorie> pour commencer le quiz`
       );
     } catch (err) {
@@ -318,14 +348,26 @@ module.exports = {
       const res = await axios.get(`${BASE_URL}/categories`);
       const categories = res.data;
 
-      const catText = categories.map(c => `📍 ${c.charAt(0).toUpperCase() + c.slice(1)}`).join("\n");
+      const icons = {
+        anime: '🎌', flag: '🏁', cartoon: '📺', animaux: '🐾',
+        monument: '🏛️', sport: '⚽', science: '🔬', histoire: '📖',
+        cinema: '🎬', geographie: '🌍', maths: '➗', culture: '🎭',
+        torf: '⚖️', general: '🎯'
+      };
+
+      const catText = categories.map(c => 
+        `${icons[c] || '📍'} ${c.charAt(0).toUpperCase() + c.slice(1)}`
+      ).join("\n");
 
       return message.reply(
-        `📚 𝗖𝗮𝘁é𝗴𝗼𝗿𝗶𝗲𝘀 𝗱𝘂 𝗤𝘂𝗶𝘇\n━━━━━━━━\n\n${catText}\n\n` +
+        `📚 𝗖𝗮𝘁é𝗴𝗼𝗿𝗶𝗲𝘀 𝗱𝘂 𝗤𝘂𝗶𝘇 (${categories.length})\n━━━━━━━━\n\n${catText}\n\n` +
         `🎯 Utilisez: quiz <catégorie>\n` +
         `🎲 Aléatoire: quiz random\n` +
         `🏆 Quotidien: quiz daily\n` +
-        `🌟 Spéciaux: quiz torf, quiz flag, quiz anime`
+        `🌟 Spéciaux: quiz torf, quiz flag, quiz anime, quiz cartoon\n` +
+        `🐾 Quiz animaux: quiz animaux\n` +
+        `🏛️ Quiz monuments: quiz monument\n` +
+        `⚽ Quiz sport: quiz sport`
       );
     } catch (err) {
       console.error("Erreur des catégories:", err);
@@ -413,7 +455,7 @@ module.exports = {
   async handleFlagQuiz(message, event, commandName, api) {
     try {
       const res = await axios.get(`${BASE_URL}/question?category=flag&userId=${event.senderID}`, { timeout: 25000 });
-      const { _id, question, options, answer } = res.data;
+      const { _id, question, options, answer, imageUrl } = res.data;
       
       if (!Array.isArray(options) || !options.length) {
         return message.reply("⚠️ Aucune question sur les drapeaux disponible pour le moment. Réessayez plus tard.");
@@ -423,7 +465,7 @@ module.exports = {
         body: `🏁 𝗤𝘂𝗶𝘇 𝗱𝗿𝗮𝗽𝗲𝗮𝘂𝘅\n━━━━━━━━\n\n🌍 Devinez le pays de ce drapeau :\n\n` +
               options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n") +
               `\n\n⏰ 30 secondes pour répondre.`,
-        attachment: await this.safeStream(question)
+        attachment: imageUrl ? await this.safeStream(imageUrl) : null
       };
 
       const info = await message.reply(flagEmbed);
@@ -468,7 +510,7 @@ module.exports = {
         body: `🎌 𝗤𝘂𝗶𝘇 𝗔𝗻𝗶𝗺𝗲\n━━━━━━━━\n\n❔ 𝗜𝗻𝗱𝗶𝗰𝗲: ${hint || question}\n\n` +
               options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n") +
               `\n\n⏰ 30 secondes\n🎯 Défi de reconnaissance de personnage !`,
-        attachment: await this.safeStream(imageUrl || question)
+        attachment: imageUrl ? await this.safeStream(imageUrl) : null
       };
 
       const info = await message.reply(animeEmbed);
@@ -500,6 +542,50 @@ module.exports = {
     }
   },
 
+  async handleImageQuiz(message, event, commandName, category, title) {
+    try {
+      const res = await axios.get(`${BASE_URL}/question?category=${category}&userId=${event.senderID}`, { timeout: 25000 });
+      const { _id, question, options, answer, imageUrl, hint } = res.data;
+      
+      if (!Array.isArray(options) || !options.length) {
+        return message.reply(`⚠️ Aucune question « ${category} » disponible pour le moment. Réessayez plus tard.`);
+      }
+
+      const body = `${title}\n━━━━━━━━\n\n❔ ${hint || question}\n\n` +
+        options.map((o, i) => `${String.fromCharCode(65 + i)}. ${o}`).join("\n") +
+        `\n\n⏰ 30 secondes pour répondre (A/B/C/D)`;
+
+      const picture = imageUrl ? await this.safeStream(imageUrl) : null;
+      const info = await message.reply(picture ? { body, attachment: picture } : { body });
+
+      global.GoatBot.onReply.set(info.messageID, {
+        commandName,
+        author: event.senderID,
+        messageID: info.messageID,
+        answer,
+        options,
+        questionId: _id,
+        startTime: Date.now(),
+        isImage: true,
+        category,
+        reward: this.envConfig.imageReward || 12000
+      });
+
+      setTimeout(() => {
+        const r = global.GoatBot.onReply.get(info.messageID);
+        if (r) {
+          message.reply(`⏰ Temps écoulé ! La bonne réponse était : ${answer}`);
+          message.unsend(info.messageID);
+          global.GoatBot.onReply.delete(info.messageID);
+        }
+      }, 30000);
+    } catch (err) {
+      console.error(`Erreur du quiz ${category}:`, err);
+      const detail = err?.response?.data?.error || err.message || "erreur inconnue";
+      return message.reply(`⚠️ Impossible de créer le quiz ${category}.\n📄 Raison: ${detail}`);
+    }
+  },
+
   async handleQuiz(message, event, args, commandName, getLang, api, usersData, forcedDifficulty = null) {
     try {
       const userName = await this.getUserName(api, event.senderID);
@@ -522,25 +608,30 @@ module.exports = {
       }
 
       const res = await axios.get(`${BASE_URL}/question`, { params: queryParams });
-      const { _id, question, options, answer, category: qCategory, difficulty } = res.data;
+      const { _id, question, options, answer, category: qCategory, difficulty, imageUrl, hint } = res.data;
 
       const optText = options.map((opt, i) => `${String.fromCharCode(65 + i)}. ${opt}`).join("\n");
 
-      const info = await message.reply(getLang("reply")
+      const body = getLang("reply")
         .replace("{category}", qCategory?.charAt(0).toUpperCase() + qCategory?.slice(1) || "Aléatoire")
         .replace("{difficulty}", difficulty?.charAt(0).toUpperCase() + difficulty?.slice(1) || "Moyen")
-        .replace("{question}", question)
-        .replace("{options}", optText));
+        .replace("{question}", hint || question)
+        .replace("{options}", optText);
+
+      const picture = imageUrl ? await this.safeStream(imageUrl) : null;
+      const info = await message.reply(picture ? { body, attachment: picture } : { body });
 
       global.GoatBot.onReply.set(info.messageID, {
         commandName,
         author: event.senderID,
         messageID: info.messageID,
         answer,
+        options,
         questionId: _id,
         startTime: Date.now(),
         difficulty,
-        category: qCategory
+        category: qCategory,
+        isImage: !!imageUrl
       });
 
       setTimeout(() => {
@@ -709,7 +800,7 @@ module.exports = {
       let correctAnswer = Reply.answer;
       let userAnswer = ans;
 
-      if ((Reply.isFlag || Reply.isAnime) && Reply.options) {
+      if ((Reply.isFlag || Reply.isAnime || Reply.isImage) && Reply.options) {
         const optionIndex = ans.charCodeAt(0) - 65;
         if (optionIndex >= 0 && optionIndex < Reply.options.length) {
           userAnswer = Reply.options[optionIndex];
@@ -742,6 +833,7 @@ module.exports = {
         if (Reply.difficulty === 'easy') baseMoneyReward = 7500;
         if (Reply.isFlag) baseMoneyReward = 12000;
         if (Reply.isAnime) baseMoneyReward = 15000;
+        if (Reply.isImage) baseMoneyReward = 12000;
         if (Reply.isDailyChallenge) baseMoneyReward = 20000;
 
         const streakBonus = (user.currentStreak || 0) * 1000;
@@ -754,6 +846,7 @@ module.exports = {
         const streakBonus2 = (user.currentStreak || 0) >= 5 ? ` 🚀 ${user.currentStreak}x série !` : '';
         const flagBonus = Reply.isFlag ? ' 🏁' : '';
         const animeBonus = Reply.isAnime ? ' 🎌' : '';
+        const imageBonus = Reply.isImage ? ' 🖼️' : '';
         const dailyBonus = Reply.isDailyChallenge ? ' 🌟' : '';
 
         responseMsg = `🎉 Bonne réponse ! 💰\n` +
@@ -763,12 +856,12 @@ module.exports = {
           `🔥 Série: ${user.currentStreak || 0}\n` +
           `⚡ Temps de réponse: ${timeSpent.toFixed(1)}s\n` +
           `🎯 Progression XP: ${user.xp || 0}/1000\n` +
-          `👤 ${userName}` + difficultyBonus + streakBonus2 + flagBonus + animeBonus + dailyBonus;
+          `👤 ${userName}` + difficultyBonus + streakBonus2 + flagBonus + animeBonus + imageBonus + dailyBonus;
       } else {
         responseMsg = `❌ Mauvaise réponse ! Bonne réponse: ${correctAnswer}\n` +
           `📊 Score: ${user.correct || 0}/${user.total || 0} (${user.accuracy || 0}%)\n` +
           `💔 Série réinitialisée\n` +
-          `👤 ${userName}` + (Reply.isFlag ? ' 🏁' : '') + (Reply.isAnime ? ' 🎌' : '');
+          `👤 ${userName}` + (Reply.isFlag ? ' 🏁' : '') + (Reply.isAnime ? ' 🎌' : '') + (Reply.isImage ? ' 🖼️' : '');
       }
 
       await message.reply(responseMsg);
@@ -797,6 +890,7 @@ module.exports = {
     streakReward: 1000,
     flagReward: 12000,
     animeReward: 15000,
+    imageReward: 12000,
     dailyChallengeBonus: 20000,
     hardDifficultyReward: 15000,
     easyDifficultyReward: 7500
