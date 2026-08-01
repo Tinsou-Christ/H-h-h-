@@ -2,12 +2,12 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const GoatMart = "https://christus-mart.vercel.app";
+const GoatMart = "https://christus-mart.vercel.app"; // Christus Store
 
 module.exports = {
   config: {
     name: "christustore",
-    aliases: [cs", "store"],
+    aliases: ["cs", "store"],
     shortDescription: { en: "✝️ Christus Store - Command Marketplace" },
     longDescription: { en: "Browse, search, upload and manage commands on Christus Store (GoatBot, Mirai Bot, AutoBot)." },
     category: "utility",
@@ -18,6 +18,12 @@ module.exports = {
   },
 
   onStart: async ({ api, event, args, message }) => {
+    // Design minimal - Christus Store : pas de cadres, une seule ligne de titre.
+    // On passe par api.sendMessage() directement (au lieu de message.reply)
+    // car message.reply() applique automatiquement fonts.auto() à TOUT le texte
+    // (via applyAutoFont dans utils.js), ce qui transforme même les liens en
+    // caractères unicode stylés et les rend illisibles/non cliquables.
+    // api.sendMessage() ne passe pas par ce filtre : le texte (et les liens) restent normaux.
     const a = (title, content) =>
       api.sendMessage(`✝️ Christus Store · ${title}\n\n${content}`, event.threadID, event.messageID);
 
@@ -301,3 +307,4 @@ module.exports = {
     }
   }
 };
+              
