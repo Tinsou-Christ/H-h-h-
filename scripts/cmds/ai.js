@@ -93,7 +93,7 @@ const handleAIRequest = async (api, event, userInput, message) => {
       { timeout: 60000 }
     );
 
-    const { reply, model } = response.data;
+    const { reply } = response.data;
 
     const finalBody = formatCoolText(reply);
 
@@ -105,7 +105,7 @@ const handleAIRequest = async (api, event, userInput, message) => {
     }
 
     const sent = await message.reply({
-      body: `🤖 Christus AI\n━━━━━━━━━\n${finalBody}\n━━━━━━━━━\n🔮 Modèle: ${model || 'GPT-5.6'}`,
+      body: `🤖 Christus AI\n━━━━━━━━━\n${finalBody}`,
       attachment: attachments.length ? attachments : undefined
     });
 
@@ -141,7 +141,7 @@ const handleAIRequest = async (api, event, userInput, message) => {
 module.exports = {
   config: {
     name: 'ai',
-    aliases: [],
+    aliases: ['chat', 'gpt'],
     version: '3.0.0',
     author: 'Christus',
     role: 0,
@@ -162,8 +162,7 @@ module.exports = {
         "🤖 Christus AI\n━━━━━━━━━\n" +
         "💬 Envoyez un message pour discuter avec moi.\n" +
         "🖼️ Répondez à un message avec une image.\n" +
-        "♻️ Tapez 'ai clear' pour réinitialiser la conversation.\n" +
-        "━━━━━━━━━\n🔮 Modèle: GPT-5.6"
+        "♻️ Tapez 'ai clear' pour réinitialiser la conversation."
       );
     }
 
