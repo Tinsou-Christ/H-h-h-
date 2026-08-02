@@ -2,7 +2,14 @@ const axios = require("axios");
 const fs = require("fs-extra");
 const path = require("path");
 
-const supportedDomains = [
+const BASE = "https://downloader-christus.onrender.com";
+const AUTO_URL = `${BASE}/api/auto`;
+const SUPPORTED_URL = `${BASE}/api/supported`;
+
+const HEADER = "📥 𝗖𝗵𝗿𝗶𝘀𝘁𝘂𝘀 𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱𝗲𝗿\n━━━━━━━━━\n\n";
+
+// Liste de secours si /api/supported est injoignable (ex: cold start Render)
+let supportedDomains = [
   "facebook.com", "fb.watch",
   "youtube.com", "youtu.be",
   "tiktok.com",
@@ -18,10 +25,23 @@ const supportedDomains = [
   "pinterest.com", "pin.it"
 ];
 
+const refreshSupportedDomains = async () => {
+  try {
+    const res = await axios.get(SUPPORTED_URL, { timeout: 15000 });
+    const list = Array.isArray(res.data) ? res.data : res.data?.domains;
+    if (Array.isArray(list) && list.length) supportedDomains = list;
+  } catch {
+    // on garde la liste de secours en cas d'échec
+  }
+};
+
+refreshSupportedDomains();
+setInterval(refreshSupportedDomains, 30 * 60 * 1000); // rafraîchi toutes les 30 min
+
 module.exports = {
   config: {
     name: "autodl",
-    version: "2.0",
+    version: "3.0",
     author: "Christus",
     role: 0,
     shortDescription: "Téléchargeur vidéo/média tout-en-un",
@@ -31,15 +51,13 @@ module.exports = {
     guide: { fr: "Envoyez simplement un lien média supporté (https://) pour le télécharger automatiquement." }
   },
 
-  onStart: async function({ api, event }) {
-    api.sendMessage(
-      "📥 Envoyez un lien vidéo/média (https://) depuis n'importe quel site supporté (YouTube, Facebook, TikTok, Instagram, Likee, CapCut, Spotify, Terabox, Twitter, Google Drive, SoundCloud, NDown, Pinterest, etc.) pour le télécharger automatiquement.",
-      event.threadID,
-      event.messageID
+  onStart: async function ({ message }) {
+    return message.reply(
+      `${HEADER}Envoie un lien vidéo/média (https://) depuis n'importe quel site supporté (YouTube, Facebook, TikTok, Instagram, Likee, CapCut, Spotify, Terabox, Twitter, Google Drive, SoundCloud, NDown, Pinterest, etc.) pour le télécharger automatiquement.`
     );
   },
 
-  onChat: async function({ api, event }) {
+  onChat: async function ({ message, event, api }) {
     const content = event.body ? event.body.trim() : "";
     if (content.toLowerCase().startsWith("auto")) return;
     if (!content.startsWith("https://")) return;
@@ -47,42 +65,51 @@ module.exports = {
 
     api.setMessageReaction("⌛️", event.messageID, () => {}, true);
 
+    const cacheDir = path.join(__dirname, "cache");
+    let filePath;
+
     try {
-      const API = `https://xsaim8x-xxx-api.onrender.com/api/auto?url=${encodeURIComponent(content)}`;
-      const res = await axios.get(API);
+      const res = await axios.get(AUTO_URL, {
+        params: { url: content },
+        timeout: 30000
+      });
 
       if (!res.data) throw new Error("Pas de réponse de l'API");
 
-      const mediaURL = res.data.high_quality || res.data.low_quality;
-      const mediaTitle = res.data.title || "Titre inconnu";
+      const { title, platform, type } = res.data;
+      const isAudio = type === "audio";
+
+      const mediaURL = isAudio
+        ? (res.data.audio || res.data.high_quality || res.data.low_quality)
+        : (res.data.high_quality || res.data.low_quality || res.data.audio);
+
       if (!mediaURL) throw new Error("Média introuvable");
 
-      const extension = mediaURL.includes(".mp3") ? "mp3" : "mp4";
-      const buffer = (await axios.get(mediaURL, { responseType: "arraybuffer" })).data;
-      const filePath = path.join(__dirname, "cache", `auto_media_${Date.now()}.${extension}`);
+      const extension = isAudio ? "mp3" : "mp4";
+      const buffer = (await axios.get(mediaURL, { responseType: "arraybuffer", timeout: 60000 })).data;
 
-      await fs.ensureDir(path.dirname(filePath));
+      await fs.ensureDir(cacheDir);
+      filePath = path.join(cacheDir, `auto_media_${Date.now()}.${extension}`);
       fs.writeFileSync(filePath, Buffer.from(buffer));
 
       api.setMessageReaction("✅️", event.messageID, () => {}, true);
-      
-      const domain = supportedDomains.find(d => content.includes(d)) || "Plateforme inconnue";
-      const platformName = domain.replace(/(\.com|\.app|\.video|\.net)/, "").toUpperCase();
 
-      const infoMsg = 
-`✅ Média téléchargé !
-Titre     : ${mediaTitle}
-Plateforme: ${platformName}
-Statut    : Succès`;
+      const infoMsg =
+        `${HEADER}` +
+        `Titre      : ${title || "Titre inconnu"}\n` +
+        `Plateforme : ${platform || "Inconnue"}\n` +
+        `Statut     : Succès`;
 
-      api.sendMessage(
-        { body: infoMsg, attachment: fs.createReadStream(filePath) },
-        event.threadID,
-        () => fs.unlinkSync(filePath),
-        event.messageID
-      );
-    } catch {
+      await message.reply({
+        body: infoMsg,
+        attachment: fs.createReadStream(filePath)
+      });
+
+      fs.unlinkSync(filePath);
+    } catch (err) {
+      console.error("❌ Christus Downloader error:", err.response?.data || err.message);
       api.setMessageReaction("❌️", event.messageID, () => {}, true);
+      if (filePath && fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
   }
 };
