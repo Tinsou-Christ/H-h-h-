@@ -2,106 +2,87 @@ const axios = require("axios");
 const fs = require("fs-extra");
 const path = require("path");
 
+const supportedDomains = [
+  "facebook.com", "fb.watch",
+  "youtube.com", "youtu.be",
+  "tiktok.com",
+  "instagram.com", "instagr.am",
+  "likee.com", "likee.video",
+  "capcut.com",
+  "spotify.com",
+  "terabox.com",
+  "twitter.com", "x.com",
+  "drive.google.com",
+  "soundcloud.com",
+  "ndown.app",
+  "pinterest.com", "pin.it"
+];
+
 module.exports = {
   config: {
-    name: "alldl",
-    aliases: ["fbdl", "igdl", "ttdl", "ytdl", "dl"],
-    version: "2.6",
-    author: "Neoaz 🐦",
-    countDown: 5,
+    name: "autodl",
+    version: "2.0",
+    author: "Christus",
     role: 0,
-    shortDescription: { en: "Multi-platform video/audio downloader" },
-    longDescription: { en: "Download videos or audio from FB, IG, TikTok, YT via link or auto-detection. Use --a for audio." },
-    category: "media",
-    guide: { en: "{pn} <url> [--a] or reply to a link. Use '{pn} auto' to toggle auto-download." }
+    shortDescription: "Téléchargeur vidéo/média tout-en-un",
+    longDescription:
+      "Télécharge automatiquement des vidéos ou médias depuis Facebook, YouTube, TikTok, Instagram, Likee, CapCut, Spotify, Terabox, Twitter, Google Drive, SoundCloud, NDown, Pinterest et plus.",
+    category: "utility",
+    guide: { fr: "Envoyez simplement un lien média supporté (https://) pour le télécharger automatiquement." }
   },
 
-  onStart: async function ({ message, args, event, api }) {
-    if (args[0] === "auto") {
-      if (!global.alldl_auto) global.alldl_auto = {};
-      const threadID = event.threadID;
-      global.alldl_auto[threadID] = !global.alldl_auto[threadID];
-      return message.reply(`Auto-download is now ${global.alldl_auto[threadID] ? "ON" : "OFF"}.`);
-    }
-
-    let url = args[0];
-    let isAudio = args.includes("--a");
-
-    if (event.type === "message_reply") {
-      const urlMatch = event.messageReply.body.match(/https?:\/\/[^\s]+/);
-      if (urlMatch) {
-        url = urlMatch[0];
-        if (args.includes("--a") || args[0] === "--a") isAudio = true;
-      }
-    }
-
-    if (!url || !url.startsWith("http")) return message.reply("Please provide a valid link.");
-    return this.handleDownload({ message, event, api, url, isAudio });
+  onStart: async function({ api, event }) {
+    api.sendMessage(
+      "📥 Envoyez un lien vidéo/média (https://) depuis n'importe quel site supporté (YouTube, Facebook, TikTok, Instagram, Likee, CapCut, Spotify, Terabox, Twitter, Google Drive, SoundCloud, NDown, Pinterest, etc.) pour le télécharger automatiquement.",
+      event.threadID,
+      event.messageID
+    );
   },
 
-  onChat: async function ({ message, event, api }) {
-    const threadID = event.threadID;
-    if (!global.alldl_auto?.[threadID] || !event.body) return;
+  onChat: async function({ api, event }) {
+    const content = event.body ? event.body.trim() : "";
+    if (content.toLowerCase().startsWith("auto")) return;
+    if (!content.startsWith("https://")) return;
+    if (!supportedDomains.some(domain => content.includes(domain))) return;
 
-    if (event.body.startsWith(global.GoatBot.config.prefix)) return;
-
-    const urlMatch = event.body.match(/https?:\/\/[^\s]+/);
-    if (urlMatch) {
-      return this.handleDownload({ message, event, api, url: urlMatch[0], isAudio: false });
-    }
-  },
-
-  handleDownload: async function ({ message, event, api, url, isAudio }) {
-    api.setMessageReaction("⏳", event.messageID);
-    const cacheDir = path.join(__dirname, "cache");
-    await fs.ensureDir(cacheDir);
-    const fileName = `dl_${Date.now()}.${isAudio ? "mp3" : "mp4"}`;
-    const filePath = path.join(cacheDir, fileName);
+    api.setMessageReaction("⌛️", event.messageID, () => {}, true);
 
     try {
-      const res = await axios.get(`https://neoaz.is-a.dev/api/download?url=${encodeURIComponent(url)}`);
-      const data = res.data.data;
-      if (!data || !data.formats || data.formats.length === 0) throw new Error();
+      const API = `https://xsaim8x-xxx-api.onrender.com/api/auto?url=${encodeURIComponent(content)}`;
+      const res = await axios.get(API);
 
-      let downloadUrl = "";
-      if (isAudio) {
-        const audioFormat = data.formats.find(f => f.quality === "audio_only" || f.ext === "mp3" || f.ext === "m4a" || f.ext === "weba");
-        downloadUrl = audioFormat?.url || data.formats[data.formats.length - 1].url;
-      } else {
-        const videoFormat = data.formats.find(f => f.quality === "hd_no_watermark" || f.quality === "no_watermark" || f.quality === "HD" || f.quality === "Full HD" || f.quality === "720p");
-        downloadUrl = videoFormat?.url || data.formats[0].url;
-      }
+      if (!res.data) throw new Error("Pas de réponse de l'API");
 
-      if (!downloadUrl) throw new Error();
+      const mediaURL = res.data.high_quality || res.data.low_quality;
+      const mediaTitle = res.data.title || "Titre inconnu";
+      if (!mediaURL) throw new Error("Média introuvable");
 
-      const response = await axios({
-        method: 'get',
-        url: downloadUrl,
-        responseType: 'stream',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-          'Referer': 'https://tikwm.com/'
-        }
-      });
+      const extension = mediaURL.includes(".mp3") ? "mp3" : "mp4";
+      const buffer = (await axios.get(mediaURL, { responseType: "arraybuffer" })).data;
+      const filePath = path.join(__dirname, "cache", `auto_media_${Date.now()}.${extension}`);
 
-      const writer = fs.createWriteStream(filePath);
-      response.data.pipe(writer);
+      await fs.ensureDir(path.dirname(filePath));
+      fs.writeFileSync(filePath, Buffer.from(buffer));
 
-      await new Promise((resolve, reject) => {
-        writer.on('finish', resolve);
-        writer.on('error', reject);
-      });
+      api.setMessageReaction("✅️", event.messageID, () => {}, true);
+      
+      const domain = supportedDomains.find(d => content.includes(d)) || "Plateforme inconnue";
+      const platformName = domain.replace(/(\.com|\.app|\.video|\.net)/, "").toUpperCase();
 
-      await message.reply({
-        body: `${data.title}`,
-        attachment: fs.createReadStream(filePath)
-      });
+      const infoMsg = 
+`✅ Média téléchargé !
+Titre     : ${mediaTitle}
+Plateforme: ${platformName}
+Statut    : Succès`;
 
-      api.setMessageReaction("✅", event.messageID);
-    } catch (error) {
-      api.setMessageReaction("❌", event.messageID);
-    } finally {
-      if (fs.existsSync(filePath)) setTimeout(() => fs.unlinkSync(filePath), 10000);
+      api.sendMessage(
+        { body: infoMsg, attachment: fs.createReadStream(filePath) },
+        event.threadID,
+        () => fs.unlinkSync(filePath),
+        event.messageID
+      );
+    } catch {
+      api.setMessageReaction("❌️", event.messageID, () => {}, true);
     }
   }
 };
