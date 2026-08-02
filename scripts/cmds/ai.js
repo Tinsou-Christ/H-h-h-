@@ -31,8 +31,8 @@ const STICKERS = [
   "387545578037993"
 ];
 
-const API_ENDPOINT = "https://future-chat-api.onrender.com/chat";
-const CLEAR_ENDPOINT = "https://future-chat-api.onrender.com/chat/clear";
+const BASE = "https://testai-christus-api-3xjn.vercel.app";
+const CHAT_URL = `${BASE}/api/public/chat`;
 const TMP_DIR = path.join(__dirname, 'tmp');
 
 if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR);
@@ -41,9 +41,13 @@ const getRandomSticker = () => {
   return STICKERS[Math.floor(Math.random() * STICKERS.length)];
 };
 
+const HEADER = "🤖 𝗖𝗵𝗿𝗶𝘀𝘁𝘂𝘀 𝗔𝗜\n━━━━━━━━━\n\n";
+
 const formatCoolText = (text) => {
   if (!text) return "";
-  return fonts.sansSerif(text);
+
+  const formatted = text.replace(/\*(.*?)\*/g, (_, p1) => fonts.serif(p1));
+  return HEADER + fonts.sansSerif(formatted);
 };
 
 const downloadFile = async (url, ext) => {
@@ -53,10 +57,52 @@ const downloadFile = async (url, ext) => {
   return filePath;
 };
 
+const urlToBase64 = async (url) => {
+  const response = await axios.get(url, { responseType: 'arraybuffer' });
+  return Buffer.from(response.data).toString('base64');
+};
+
+// --- Anti-surcharge -------------------------------------------------
+// L'API partage un quota Groq entre tous les utilisateurs : quand trop
+// de requêtes arrivent en même temps/trop vite, elle répond (en 200)
+// avec un message de type "connexions IA surchargées". On limite les
+// rafales avec une file d'attente, et on réessaie en silence avant de
+// montrer quoi que ce soit à l'utilisateur.
+
+const OVERLOAD_PATTERNS = [/surcharg/i, /quota/i, /groq/i];
+const isOverloadReply = (text) => !!text && OVERLOAD_PATTERNS.some((r) => r.test(text));
+
+let requestQueue = Promise.resolve();
+const MIN_INTERVAL_MS = 1500; // délai mini entre deux requêtes à l'API
+
+const enqueue = (task) => {
+  const run = requestQueue.then(async () => {
+    try {
+      return await task();
+    } finally {
+      await new Promise((r) => setTimeout(r, MIN_INTERVAL_MS));
+    }
+  });
+  requestQueue = run.catch(() => {}); // la file continue même si une tâche échoue
+  return run;
+};
+
+const callChatWithRetry = async (payload, maxAttempts = 3) => {
+  let lastResponse;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    lastResponse = await axios.post(CHAT_URL, payload, { timeout: 60000 });
+    const replyText = lastResponse.data?.reply;
+    if (!isOverloadReply(replyText)) return lastResponse;
+    if (attempt < maxAttempts) await new Promise((r) => setTimeout(r, 4000 * attempt));
+  }
+  return lastResponse;
+};
+// ---------------------------------------------------------------------
+
 const resetConversation = async (api, event, message) => {
   api.setMessageReaction("♻️", event.messageID, () => {}, true);
   try {
-    await axios.delete(`${CLEAR_ENDPOINT}/${event.senderID}`);
+    await axios.post(CHAT_URL, { uid: event.senderID, message: "reset", reset: true });
     return message.reply("✅ Conversation réinitialisée.");
   } catch {
     return message.reply("❌ Échec de la réinitialisation.");
@@ -65,47 +111,62 @@ const resetConversation = async (api, event, message) => {
 
 const handleAIRequest = async (api, event, userInput, message) => {
   const userId = event.senderID;
-  let imageUrl = null;
+  let imageBase64 = null;
   let messageContent = userInput;
 
   api.setMessageReaction("⏳", event.messageID, () => {}, true);
 
   if (event.messageReply) {
     const att = event.messageReply.attachments?.[0];
-    if (att?.type === 'photo') imageUrl = att.url;
+    if (att?.type === 'photo') {
+      try { imageBase64 = await urlToBase64(att.url); } catch {}
+    }
   }
 
   const urlMatch = messageContent.match(/(https?:\/\/[^\s]+)/)?.[0];
   if (urlMatch && validUrl.isWebUri(urlMatch)) {
-    imageUrl = urlMatch;
     messageContent = messageContent.replace(urlMatch, '').trim();
+    if (!imageBase64) {
+      try { imageBase64 = await urlToBase64(urlMatch); } catch {}
+    }
   }
 
-  if (!messageContent && !imageUrl) {
+  if (!messageContent && !imageBase64) {
     api.setMessageReaction("❌", event.messageID, () => {}, true);
-    return message.reply("❌ Veuillez fournir un message ou une image.");
+    return;
   }
 
   try {
-    const response = await axios.post(
-      API_ENDPOINT,
-      { uid: userId, message: messageContent, image_url: imageUrl },
-      { timeout: 60000 }
+    const response = await enqueue(() =>
+      callChatWithRetry({
+        message: messageContent || "Décris cette image.",
+        uid: userId,
+        image: imageBase64 || undefined
+      })
     );
 
-    const { reply } = response.data;
+    const { reply, images, lyrics } = response.data;
 
-    const finalBody = formatCoolText(reply);
+    let finalBody = formatCoolText(reply);
 
-    let attachments = [];
-    if (imageUrl) {
-      try {
-        attachments.push(fs.createReadStream(await downloadFile(imageUrl, 'jpg')));
-      } catch (e) {}
+    if (lyrics) {
+      const title = lyrics.title || "";
+      const artist = lyrics.artist || "";
+      const lyricsText = lyrics.lyrics || lyrics.text || "";
+      if (title || lyricsText) {
+        finalBody += `\n\n🎵 ${title}${artist ? " · " + artist : ""}\n${lyricsText}`;
+      }
+    }
+
+    const attachments = [];
+    if (Array.isArray(images) && images.length) {
+      for (const imgUrl of images.slice(0, 4)) {
+        try { attachments.push(fs.createReadStream(await downloadFile(imgUrl, 'jpg'))); } catch {}
+      }
     }
 
     const sent = await message.reply({
-      body: `🤖 Christus AI\n━━━━━━━━━\n${finalBody}`,
+      body: finalBody,
       attachment: attachments.length ? attachments : undefined
     });
 
@@ -120,20 +181,7 @@ const handleAIRequest = async (api, event, userInput, message) => {
     api.setMessageReaction("✅", event.messageID, () => {}, true);
 
   } catch (err) {
-    console.error(err);
-    
-    let errorMsg = "❌ Désolé, une erreur est survenue.\n";
-    if (err.code === 'ECONNABORTED') {
-      errorMsg += "⏰ Le serveur met trop de temps à répondre.";
-    } else if (err.response?.status === 429) {
-      errorMsg += "🚦 Trop de requêtes. Attendez un peu.";
-    } else if (err.response?.status === 503) {
-      errorMsg += "🔧 Service en maintenance. Réessayez plus tard.";
-    } else {
-      errorMsg += "🔧 Erreur interne. Réessayez plus tard.";
-    }
-    
-    message.reply(errorMsg);
+    console.error("❌ Christus AI error:", err.response?.data || err.message);
     api.setMessageReaction("❌", event.messageID, () => {}, true);
   }
 };
@@ -141,14 +189,11 @@ const handleAIRequest = async (api, event, userInput, message) => {
 module.exports = {
   config: {
     name: 'ai',
-    aliases: ['chat', 'gpt'],
-    version: '3.0.0',
+    aliases: [],
+    version: '3.0',
     author: 'Christus',
     role: 0,
-    category: 'ai',
-    shortDescription: { en: 'Chat with Christus AI (GPT-5.6)' },
-    longDescription: { en: 'Advanced AI chat with image recognition support.' },
-    guide: { en: '{pn} <message> | {pn} clear' }
+    category: 'ai'
   },
 
   onStart: async function ({ api, event, args, message }) {
@@ -158,12 +203,7 @@ module.exports = {
       const sticker = getRandomSticker();
       api.sendMessage({ sticker }, event.threadID);
       api.setMessageReaction("🟡", event.messageID, () => {}, true);
-      return message.reply(
-        "🤖 Christus AI\n━━━━━━━━━\n" +
-        "💬 Envoyez un message pour discuter avec moi.\n" +
-        "🖼️ Répondez à un message avec une image.\n" +
-        "♻️ Tapez 'ai clear' pour réinitialiser la conversation."
-      );
+      return;
     }
 
     if (['clear', 'reset'].includes(input.toLowerCase())) {
@@ -198,3 +238,4 @@ module.exports = {
     return handleAIRequest(api, event, input, message);
   }
 };
+                                                        
