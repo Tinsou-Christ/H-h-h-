@@ -76,12 +76,14 @@ module.exports = {
 
       if (!res.data) throw new Error("Pas de réponse de l'API");
 
-      const { title, platform, type } = res.data;
-      const isAudio = type === "audio";
+      const { title, platform } = res.data;
 
-      const mediaURL = isAudio
-        ? (res.data.audio || res.data.high_quality || res.data.low_quality)
-        : (res.data.high_quality || res.data.low_quality || res.data.audio);
+      // On ne se fie pas au champ "type" de l'API (peu fiable, ex: Snapchat
+      // renvoie parfois "audio" alors qu'un format vidéo existe). On privilégie
+      // systématiquement la vidéo si un format vidéo est disponible, et on ne
+      // bascule sur l'audio que s'il n'y a aucun format vidéo (Spotify, SoundCloud...).
+      const mediaURL = res.data.high_quality || res.data.low_quality || res.data.audio;
+      const isAudio = !res.data.high_quality && !res.data.low_quality && !!res.data.audio;
 
       if (!mediaURL) throw new Error("Média introuvable");
 
@@ -113,3 +115,4 @@ module.exports = {
     }
   }
 };
+    
