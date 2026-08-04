@@ -155,7 +155,7 @@ module.exports = {
     version: "2.2",
     author: "Christus",
     countDown: 10,
-    role: 3,
+    role: 0,
     shortDescription: "Rechercher des images sur Pinterest",
     longDescription: "Recherche des images sur Pinterest, avec un aperçu en canvas pour naviguer.",
     category: "Image",
