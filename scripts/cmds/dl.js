@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require("fs-extra");
 const path = require("path");
 
-const BASE = "https://downloader-christus.onrender.com";
+const BASE = "https://downloader-hub.onrender.com";
 const AUTO_URL = `${BASE}/api/auto`;
 const SUPPORTED_URL = `${BASE}/api/supported`;
 
