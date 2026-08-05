@@ -30,7 +30,7 @@ module.exports = {
 
     try {
       const { data } = await axios.get(
-        `https://lyric-stream-api.onrender.com/api/lyrics?song=${encodeURIComponent(query)}`,
+        `https://lyrics-yur4.onrender.com/api/lyrics?song=${encodeURIComponent(query)}`,
         { timeout: 15000 }
       );
 
