@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'https://dockerfile-fixer.onrender.com/api';
+const BASE_URL = 'https://quiz-api-zd8a.onrender.com/api';
 
 module.exports = {
   config: {
