@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
-const GoatMart = "https://christus-mart.vercel.app"; // Christus Store
+const GoatMart = "https://harrd.vercel.app"; 
 
 module.exports = {
   config: {
