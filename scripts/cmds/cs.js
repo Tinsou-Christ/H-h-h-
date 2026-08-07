@@ -1,31 +1,31 @@
 const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
 
-const GoatMart = "https://harrd.vercel.app"; 
+const GoatMart = "https://store-pearl-zeta.vercel.app"; // Christus Store
 
 module.exports = {
   config: {
     name: "christustore",
     aliases: ["cs", "store"],
     shortDescription: { en: "✝️ Christus Store - Command Marketplace" },
-    longDescription: { en: "Browse, search, upload and manage commands on Christus Store (GoatBot, Mirai Bot, AutoBot)." },
+    longDescription: { en: "Browse, search and manage commands on Christus Store (GoatBot, Mirai Bot, AutoBot, Cassidy)." },
     category: "utility",
-    version: "3.0",
+    version: "4.0",
     role: 0,
     author: "Christus",
     cooldowns: 0,
   },
 
-  onStart: async ({ api, event, args, message }) => {
-    // Design minimal - Christus Store : pas de cadres, une seule ligne de titre.
+  onStart: async ({ api, event, args }) => {
+    // Style Christus bot : header + trait, identique à ai.js / animate.js / autodl.js.
     // On passe par api.sendMessage() directement (au lieu de message.reply)
     // car message.reply() applique automatiquement fonts.auto() à TOUT le texte
     // (via applyAutoFont dans utils.js), ce qui transforme même les liens en
     // caractères unicode stylés et les rend illisibles/non cliquables.
     // api.sendMessage() ne passe pas par ce filtre : le texte (et les liens) restent normaux.
+    const HEADER = "✝️ 𝗖𝗵𝗿𝗶𝘀𝘁𝘂𝘀 𝗦𝘁𝗼𝗿𝗲\n━━━━━━━━━\n\n";
+
     const a = (title, content) =>
-      api.sendMessage(`✝️ Christus Store · ${title}\n\n${content}`, event.threadID, event.messageID);
+      api.sendMessage(`${HEADER}📌 ${title}\n\n${content}`, event.threadID, event.messageID);
 
     const b = (error, action) => {
       console.error(`Christus Store ${action} error:`, error);
@@ -46,7 +46,9 @@ module.exports = {
       return a("Erreur", `❌ Impossible de ${action}.\nStatut : ${error.response?.status || "Inconnu"}\n${error.response?.data?.error || error.message || "Erreur inconnue"}`);
     };
 
-    const catEmoji = { goatbot: "🐐", mirai: "🌸", autobot: "🤖" };
+    const catEmoji = { goatbot: "🐐", mirai: "🌸", autobot: "🤖", cassidy: "🎀" };
+    const validCategories = Object.keys(catEmoji);
+
     const listItems = (items, offset = 0) =>
       items.map((x, y) =>
         `${offset + y + 1}. ${catEmoji[x.category] || "📦"} ${x.itemName} (ID: ${x.itemID})\n👀 ${x.views || 0} · 💝 ${x.likes || 0} · 👨‍💻 ${x.authorName}`
@@ -56,7 +58,7 @@ module.exports = {
       if (!args[0]) {
         return a(
           "Aide",
-          `📦 ${event.body} show <ID>\n📄 ${event.body} page <numéro>\n🔍 ${event.body} search <requête>\n🗂️ ${event.body} category <goatbot|mirai|autobot>\n📊 ${event.body} stats\n🎯 ${event.body} trending\n🔧 ${event.body} maintenance\n⬆️ ${event.body} upload <fichier>\n🔗 ${event.body} raw <ID>\n💝 ${event.body} like <ID>\n\nExemple : ${event.body} show 1`
+          `📦 ${event.body} show <ID>\n📄 ${event.body} page <numéro>\n🔍 ${event.body} search <requête>\n🗂️ ${event.body} category <goatbot|mirai|autobot|cassidy>\n📊 ${event.body} stats\n🎯 ${event.body} trending\n🔧 ${event.body} maintenance\n🔗 ${event.body} raw <ID>\n💝 ${event.body} like <ID>\n\nExemple : ${event.body} show 1`
         );
       }
 
@@ -110,7 +112,7 @@ module.exports = {
         case "category":
         case "cat": {
           const cat = (args[1] || "").toLowerCase();
-          if (!["goatbot", "mirai", "autobot"].includes(cat)) return a("Erreur", "⚠️ Catégories : goatbot, mirai, autobot.");
+          if (!validCategories.includes(cat)) return a("Erreur", `⚠️ Catégories : ${validCategories.join(", ")}.`);
           const g = parseInt(args[2]) || 1;
 
           try {
@@ -217,48 +219,6 @@ module.exports = {
           }
         }
 
-        case "upload": {
-          const o = event.senderID;
-          const p = global.GoatBot?.config?.adminBot || [];
-          if (!p.includes(o)) return a("Refusé", "🚫 Réservé aux administrateurs du bot.");
-
-          const q = args[1];
-          if (!q) return a("Erreur", "⚠️ Fournis le nom d'un fichier de commande.");
-          const r = path.join(__dirname, q.endsWith(".js") ? q : `${q}.js`);
-          if (!fs.existsSync(r)) return a("Erreur", `❌ Fichier introuvable : ${r}`);
-
-          try {
-            const s = fs.readFileSync(r, "utf-8");
-            let t;
-            try {
-              t = require(r);
-            } catch {
-              return a("Erreur", "❌ Impossible d'analyser le fichier.");
-            }
-
-            const category = args[2]?.toLowerCase() && ["goatbot", "mirai", "autobot"].includes(args[2].toLowerCase())
-              ? args[2].toLowerCase()
-              : "goatbot";
-
-            const u = {
-              itemName: t.config?.name || q,
-              description: t.config?.longDescription?.en || t.config?.shortDescription?.en || "Commande de bot.",
-              category,
-              code: s,
-              authorName: t.config?.author || "Anonymous",
-            };
-
-            const v = await axios.post(`${GoatMart}/api/items`, u, { headers: { "Content-Type": "application/json" } });
-            const { success, shortId, itemId, message: responseMessage } = v.data;
-            if (!success) return a("Échec", responseMessage || "❌ Échec de l'upload, réessaie plus tard.");
-
-            return a("Upload réussi", `📦 ${u.itemName}\n🧑 ${u.authorName}\n🗂️ ${category}\n📄 ${s.split("\n").length} lignes\n\n🆔 ${itemId}\n🔐 ${shortId}\n\n🔗 Raw : ${GoatMart}/raw/${shortId}\n🌐 Voir : ${GoatMart}/view?id=${itemId}`);
-          } catch (err) {
-            console.error("Upload error:", err);
-            return a("Échec", "❌ Échec de l'upload (erreur serveur).");
-          }
-        }
-
         case "edit": {
           const o = event.senderID;
           const p = global.GoatBot?.config?.adminBot || [];
@@ -269,7 +229,7 @@ module.exports = {
           if (!itemId || !adminCode) return a("Erreur", `⚠️ Usage : ${event.body} edit <ID> <adminCode>`);
 
           try {
-            const v = await axios.put(`${GoatMart}/api/items/${encodeURIComponent(itemId)}`, { adminCode });
+            await axios.put(`${GoatMart}/api/items/${encodeURIComponent(itemId)}`, { adminCode });
             return a("Modifié", `✅ Commande ${itemId} mise à jour.`);
           } catch (err) {
             if (err.response?.status === 403 || err.response?.status === 401) return a("Refusé", "🚫 Code admin invalide.");
@@ -307,4 +267,4 @@ module.exports = {
     }
   }
 };
-              
+                        
