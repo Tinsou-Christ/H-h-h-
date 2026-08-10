@@ -54,7 +54,7 @@ module.exports = {
         format: "jpg"
       };
 
-      let endpoint = "https://gem-tw6a.onrender.com/generate";
+      let endpoint = "https://gem-christus-api.onrender.com/generate";
 
       // Checking for Image Reply (Edit Mode)
       if (event.messageReply?.attachments?.[0]?.type === "photo") {
