@@ -30,7 +30,7 @@ module.exports = {
 
     try {
       const { data } = await axios.get(
-        `https://christus-lyrics-ewat.vercel.app/api/lyrics?song=${encodeURIComponent(query)}`,
+        `https://christus-lyrics.vercel.app/api/lyrics?song=${encodeURIComponent(query)}`,
         { timeout: 15000 }
       );
 
