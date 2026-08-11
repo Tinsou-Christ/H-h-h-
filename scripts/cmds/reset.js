@@ -8,7 +8,7 @@ try {
   fonts = { bold: (t) => t, monospace: (t) => t, sansSerif: (t) => t };
 }
 
-const OWNER_UID = "61590743674439";
+const OWNER_UID = "61591338058896";
 
 function formatMoney(amount) {
   amount = Number(amount) || 0;
