@@ -184,7 +184,7 @@ module.exports = {
 
       processingMessage = await message.reply("🔍 Recherche sur Pinterest...");
 
-      const res = await axios.get(`https://pinspiration-hub.onrender.com/api/pin?query=${encodeURIComponent(query)}&num=90`);
+      const res = await axios.get(`https://christus-downloader.vercel.app/api/pin?query=${encodeURIComponent(query)}&num=90`);
       const allImageUrls = res.data.results || [];
 
       if (allImageUrls.length === 0) {
